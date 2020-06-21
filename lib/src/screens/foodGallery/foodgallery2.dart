@@ -349,16 +349,7 @@ class _FoodGalleryState extends State<FoodGallery2> {
                                     .spaceAround,
                                 children: <Widget>[
 
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 9,
-                                        vertical: 0),
 
-                                    width: displayWidth(context) / 5,
-                                    height: displayHeight(context) / 21,
-                                    child: Image.asset('assets/Group520.png'),
-
-                                  ),
                                   // CONTAINER FOR TOTAL PRICE CART BELOW.
 
 
