@@ -15,6 +15,7 @@ import 'package:linkupclient/src/DataLayer/models/FoodItemWithDocID.dart';
 //import 'package:linkupclient/src
 // above are local files i.e. pages .
 import 'package:linkupclient/src/identity/loginPage.dart';
+import 'package:linkupclient/src/screens/clientHome/clientHome.dart';
 //import 'package:linkupclient/src/identity/signup.dart';
 //import 'package:linkupclient/src/screens/drawerScreen/DrawerScreenFoodGallery.dart';
 //import 'package:linkupclient/src/screens/homeScreen/food_gallery.dart';
@@ -38,7 +39,8 @@ import 'package:linkupclient/src/screens/foodGallery/foodgallery2.dart';
 
 //import 'package:linkupclient/src/BLoC/app_bloc.dart';
 //import 'package:linkupclient/src/BLoC/bloc_provider2.dart';
-import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
+//import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
+import 'package:linkupclient/src/BLoC/clientHome_bloc.dart';
 //import 'package:linkupclient/src/BLoC/foodItemDetails_bloc.dart';
 //import 'package:linkupclient/src/utilities/screen_size_reducers.dart';
 
@@ -190,7 +192,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
 //    logger.e('at build of welcome page');
 
-    FoodItemWithDocID emptyFoodItemWithDocID = new FoodItemWithDocID();
+//    FoodItemWithDocID emptyFoodItemWithDocID = new FoodItemWithDocID();
 //    List<NewIngredient> emptyIngs = [];
 
 //    final appBloc = AppBloc(emptyFoodItemWithDocID,emptyIngs,,fromWhichPage:0);
@@ -224,55 +226,11 @@ class _WelcomePageState extends State<WelcomePage> {
 
             stream: identityBloc.
             getCurrentFirebaseUserStream,
+
             initialData: identityBloc.
             getCurrentFirebaseUser,
+
             builder: (context, snapshot) {
-//              switch (snapshot.connectionState){
-//                case ConnectionState.waiting:
-//                case ConnectionState.none:
-//                return Center(
-//                  child: Column(
-//                    children: <Widget>[
-//
-//                      Center(
-//                        child: Container(
-//                            alignment: Alignment.center,
-//                            child: new CircularProgressIndicator(
-//                                backgroundColor: Colors.lightGreenAccent)
-//                        ),
-//                      ),
-//                      Center(
-//                        child: Container(
-//                            alignment: Alignment.center,
-//                            child: new CircularProgressIndicator(
-//                              backgroundColor: Colors.yellow,)
-//                        ),
-//                      ),
-//                      Center(
-//                        child: Container(
-//                            alignment: Alignment.center,
-//                            child: new CircularProgressIndicator(
-//                                backgroundColor: Colors.redAccent)
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                );
-//                case ConnectionState.active:
-//                case ConnectionState.done:
-//              }
-//              if(snapshot.error){
-//                return  Center(
-//                  child: Container(
-//                    alignment: Alignment.center,
-//                    child: Text('something went wrong'),
-//                  ),
-//                );
-//              }
-
-           //   print('snapshot.hasData: ${snapshot.hasData}');
-
-
               if (snapshot.hasError) {
                 return Center(
                   child: Container(
@@ -282,64 +240,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 );
               }
 
-
-              /*
-              if (snapshot.hasData) {
-                print('snapshot.hasData is ${snapshot
-                    .hasData} in Welcome page ');
-
-                if (snapshot.data is FirebaseUser) {
-                  /*
-                return
-                  BlocProvider<FoodGalleryBloc>(
-                    bloc: FoodGalleryBloc(),
-                    child: FoodGallery2(),
-                  );
-                */
-
-                  print('  :: ::  snapshot.data is FirebaseUser');
-
-                  FoodItemWithDocID emptyFoodItemWithDocID = new FoodItemWithDocID();
-
-
-//                  List<NewIngredient> _allIngredientState = [];
-//                  List<NewIngredient> emptyIngs = [];
-
-
-//                  final bloc = BlocProvider2.of(context).getFoodGalleryBlockObject;
-
-
-//                  FoodItemWithDocID oneFoodItem, List<NewIngredient> allIngsScoped, {int fromWelComePage=0
-                  return (
-
-                      BlocProvider<FoodGalleryBloc>(
-                          bloc: FoodGalleryBloc(),
-                          child: FoodGallery2()
-
-                      )
-                  /*
-                      BlocProvider2(/*thisAllIngredients2:welcomPageIngredients, */
-                          bloc2: AppBloc(
-                              emptyFoodItemWithDocID, []),
-                          /*
-                          child: BlocProvider<FoodItemDetailsBloc>(
-                              bloc:FoodItemDetailsBloc(emptyFoodItemWithDocID,emptyIngs ,fromWhichPage:0),
-                              child: FoodGallery2()
-
-                          )
-                          */
-                          child: FoodGallery2()
-                      )
-
-                      */
-
-                  );
-                }
-                else {
-                  return LoginPage();
-                }
-              }
-              */
               else {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
@@ -467,9 +367,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     */
 
 
-                    BlocProvider<FoodGalleryBloc>(
-                        bloc: FoodGalleryBloc(),
-                        child: FoodGallery2()
+                    BlocProvider<ClientHomeBloc>(
+                        bloc: ClientHomeBloc(),
+                        child: ClientHome()
 
                     ) : LoginPage();
                 }

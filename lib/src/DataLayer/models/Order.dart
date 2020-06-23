@@ -63,8 +63,6 @@ class Order {
         this.ordersCustomer,
         this.totalPrice,
         this.page,
-
-
         // this.foodItemOrderID,
       }
   );

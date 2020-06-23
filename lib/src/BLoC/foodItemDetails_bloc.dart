@@ -65,17 +65,11 @@ class FoodItemDetailsBloc /*with ChangeNotifier */ implements Bloc  {
   // can also use var _oneFoodItem = new FoodItemWithDocID() ;
 //  FoodItemWithDocID _oneFoodItem = new FoodItemWithDocID() ;
   FoodItemWithDocIDViewModel _thisFoodItem ;
-//  String _currentSize = 'normal';
 
-//  var _currentSize = new Map<String ,double>(); // currentlyNotUsing.
-
-//  Map<String,Dynamic>
 
   FoodItemWithDocIDViewModel get currentFoodItem => _thisFoodItem;
 
-//  _thisFoodItem =thisFoodpriceModified;
-//
-//  _controller.sink.add(thisFoodpriceModified);
+
 
   List<NewIngredient> _allIngItemsDetailsBlock =[];
 

@@ -90,6 +90,30 @@ class FirebaseClient {
 
   }
 
+
+  Future<DocumentSnapshot> fetchRestaurantDataClient() async{
+
+    var snapshot = Firestore.instance
+        .collection('restaurants')
+        .document('USWc8IgrHKdjeDe9Ft4j')
+        .get();
+    /*
+        .then((DocumentSnapshot ds) {
+      // use ds as a snapshot
+    });*/
+    /*
+    var snapshot = await Firestore.instance.collection("restaurants")
+        .document('USWc8IgrHKdjeDe9Ft4j');
+
+//    var snapshot= Firestore.instance
+//        .collection("restaurants").document('USWc8IgrHKdjeDe9Ft4j').collection('foodItems')
+//        .getDocuments();
+
+    return snapshot;
+
+     */
+    return snapshot;
+  }
   Future<QuerySnapshot> fetchAllIngredients()async{
 
    // print ('at here fetchAllIngredients ==================================== *************** ');
