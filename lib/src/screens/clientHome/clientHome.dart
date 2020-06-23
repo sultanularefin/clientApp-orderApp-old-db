@@ -183,6 +183,10 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                         Container(
 
                           height: displayHeight(context) / 14,
+//                          width :displayWidth(context) -(MediaQuery
+//                              .of(context)
+//                              .size
+//                              .width / 5.8) -3,
                           color: Color(0xffFFFFFF),
                           child: StreamBuilder<Restaurant>(
 
@@ -191,7 +195,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
-                                return Center(child: new LinearProgressIndicator());
+                                return Container(
+                                    alignment: Alignment.topCenter,
+                                    child: new LinearProgressIndicator());
                               }
                               else {
                                 //   print('snapshot.hasData FDetails: ${snapshot.hasData}');
@@ -203,154 +209,29 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                                   mainAxisAlignment: MainAxisAlignment
                                       .spaceAround,
                                   children: <Widget>[
-
-
                                     // CONTAINER FOR TOTAL PRICE CART BELOW.
-
-
                                     Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 0,
-                                          vertical: 0),
-                                      decoration: BoxDecoration(
-//                                      shape: BoxShape.circle,
-                                        borderRadius: BorderRadius.circular(25),
-                                        border: Border.all(
+                                      width: displayWidth(context) /10,
+                                      height: displayWidth(context) /7,
+                                      padding:EdgeInsets.symmetric(vertical: 7,horizontal: 5),
+                                      child:ClipOval(
 
-                                          color: Color(0xffBCBCBD),
-                                          style: BorderStyle.solid,
-                                          width: 3,
-
-
+                                        child: CachedNetworkImage(
+                                          imageUrl: oneRestaurant.avatar,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context,
+                                              url) => new LinearProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Image.network(
+                                                  'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
+//
                                         ),
-
-                                        boxShadow: [
-                                          BoxShadow(
-//                                            color: Color.fromRGBO(250, 200, 200, 1.0),
-                                              color: Color(0xffFFFFFF),
-                                              blurRadius: 10.0,
-                                              // USER INPUT
-                                              offset: Offset(0.0, 2.0))
-                                        ],
-
-
-                                        color: Color(0xffFFFFFF),
-//                                      Colors.black54
-                                      ),
-                                      // USER INPUT
-
-
-//                                  color: Color(0xffFFFFFF),
-                                      width: displayWidth(context) / 3,
-                                      height: displayHeight(context) / 27,
-                                      padding: EdgeInsets.only(
-                                          left: 4, top: 3, bottom: 3, right: 3),
-                                      child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceAround,
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .center,
-                                        children: <Widget>[
-                                          Container(
-
-                                            height: displayWidth(context) / 34,
-//                                          height: 25,
-                                            width: 5,
-                                            margin: EdgeInsets.only(left: 0, right: 15, bottom: 5),
-//                    decoration: BoxDecoration(
-//                      shape: BoxShape.circle,
-//                      color: Colors.white,
-//                    ),
-                                            // work 1
-                                            child: Icon(
-//                                          Icons.add_shopping_cart,
-                                              Icons.search,
-//                                            size: 28,
-                                              size: displayWidth(context) / 24,
-                                              color: Color(0xffBCBCBD),
-                                            ),
-
-
-                                          ),
-
-                                          Container(
-//                                        margin:  EdgeInsets.only(
-//                                          right:displayWidth(context) /32 ,
-//                                        ),
-                                            alignment: Alignment.center,
-                                            width: displayWidth(context) / 4.7,
-//                                        color:Colors.purpleAccent,
-                                            // do it in both Container
-                                            child: TextField(
-                                              decoration: InputDecoration(
-//                                            prefixIcon: new Icon(Icons.search),
-//                                        borderRadius: BorderRadius.all(Radius.circular(5)),
-//                                        border: Border.all(color: Colors.white, width: 2),
-                                                border: InputBorder.none,
-//                                              hintText: 'Search about meal',
-//                                              hintStyle: TextStyle(fontWeight: FontWeight.bold),
-
-
-//                                        labelText: 'Search about meal.'
-                                              ),
-                                              onChanged: (text) {
-//                                              logger.i('on onChanged of condition 4');
-
-
-                                                print(
-                                                    "First text field from Condition 04: $text");
-                                              },
-                                              onTap: () {
-                                                print('condition 4');
-//                                              logger.i('on Tap of condition 4');
-
-                                              },
-
-                                              onEditingComplete: () {
-//                                              logger.i('onEditingComplete  of condition 4');
-                                                print(
-                                                    'called onEditing complete');
-                                              },
-
-                                              onSubmitted: (String value) async {
-                                                await showDialog<void>(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: const Text(
-                                                          'Thanks!'),
-                                                      content: Text(
-                                                          'You typed "$value".'),
-                                                      actions: <Widget>[
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: const Text('OK'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-
-                                          )
-
-//                                  Spacer(),
-
-//                                  Spacer(),
-
-                                        ],
                                       ),
                                     ),
 
                                     Container(
 
-                                      child: futureWidget(), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
+                                      child: Text('${oneRestaurant.name}'), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
 
                                     ),
 
@@ -364,6 +245,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                         ),
 
                         //1ST CONTAINER RESTAURANT INFORMATION ENDS HERE.
+
+
                         Container(
                           height: displayHeight(context) / 14,
                           color: Color(0xffFFFFFF),
@@ -583,8 +466,10 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                       ]
                   )
               ),
+              //EXPANDED WIDGET ENDS HERE
 
               Container(
+                alignment: Alignment.topCenter,
                 height: displayHeight(context) -
                     MediaQuery
                         .of(context)
@@ -708,7 +593,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
       fontSize: 30,
       fontWeight: FontWeight.normal,
 //                    fontStyle: FontStyle.italic,
-      color: Color(0xffE3E5E8),
+      color: Color(0xff727C8E),
     ),
     ),
     ),
@@ -834,7 +719,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
       return
         RaisedButton(
 //                        color: Color(0xffFEE295),
-          color:Color(0xff727C8E),
+          color:Color(0xffE3E5E8),
           highlightColor: Colors.lightGreenAccent,
 //                                                                          highlightedBorderColor: Colors.blueAccent,
           clipBehavior: Clip.hardEdge,

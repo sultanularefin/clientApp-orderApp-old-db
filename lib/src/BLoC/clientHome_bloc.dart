@@ -179,10 +179,25 @@ class ClientHomeBloc implements Bloc {
 
     String  restaurantOpen = snapshot['open'];
 
+
+
     String  restaurantAvatar =snapshot['avatar']==''?
     'https://thumbs.dreamstime.com/z/smiling-orange-fruit-cartoon-mascot-character-holding-blank-sign-smiling-orange-fruit-cartoon-mascot-character-holding-blank-120325185.jpg'
-        :storageBucketURLPredicate + Uri.encodeComponent(snapshot['avatar'])
+        :''
+        + storageBucketURLPredicate +
+        Uri.encodeComponent(snapshot['avatar'])
         +'?alt=media';
+    // 'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/'
+
+    print('restaurantAvatar: $restaurantAvatar');
+    //   https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages%2Fnoutupizzerai.png?
+    // alt=media&token=0a53af83-078f-4392-a1cf-e14cd584c6a1
+
+//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImagesnoutupizzerai.png?alt=media
+//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages/noutupizzerai.png?alt=media
+//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages/noutupizzerai.png?alt=media
+//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages%2Fnoutupizzerai.png?alt=media
+// restaurantImages/noutupizzerai.png
 
     String  restaurantContact= snapshot['contact'];
 
@@ -196,6 +211,8 @@ class ClientHomeBloc implements Bloc {
     final double restaurantDiscount = restaurantDiscount0.toDouble();
 //    final double foodItemDiscount = doc['discount'];
     String  restaurantName =snapshot['name'];
+
+    print('restaurantName: $restaurantName');
     double  restaurantRating =snapshot['rating'];
     double  restaurantTotalRating =snapshot['totalRating'];
 
