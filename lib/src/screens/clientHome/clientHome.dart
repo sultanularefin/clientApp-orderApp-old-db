@@ -514,6 +514,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                             Container(
                               color: Colors.yellowAccent,
+                              height:300,
 //                                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
 //                                        width: displayWidth(context) /1.8,
                               width: displayWidth(context) / 1.1,
@@ -657,10 +658,167 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   Widget menuAnimatedWidget(Restaurant oneRestaurant){
 
 
-    return Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}');
+//
+//    bolognese pizza
+
+    Map<String, dynamic> listpart1 = new Map<String, dynamic>();
+
+    List<String> actionkeys =['share', 'love', 'favorite'];
+    List<String> iconNames =['share', 'love', 'favorite'];
+
+
+    return Container(
+
+
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text('bolognese pizza',style: TextStyle(
+                    fontFamily: 'Itim-Regular',
+                    color: Color(0xff3F5362),
+                  ),),
+                  Text('7.500' + '\u20AC',style: TextStyle(
+                    fontFamily: 'Itim-Regular',
+                    color: Color(0xff3F5362),
+                  ),),
+                ],
+              ),
+            ),
+
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    color: Colors.blueGrey,
+//                                  color:Color(0xffDAD7C3),
+
+//                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+                    width: 80,
+                    child:
+                    Column(
+//                      shrinkWrap: false,
+//                      padding: const EdgeInsets.all(8),
+                      children: <Widget>[
+                        Container(
+                          height: 50,
+                          color: Colors.amber[600],
+                          child: Column(
+                            children: <Widget>[
+
+                              Icon(
+                                getIconForName(iconNames[0]),
+                                color: Color(0xffFC0000),
+                                size: displayWidth(context) / 13,
+
+                              ),
+                              Text('${actionkeys[0]}'),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          color: Colors.amber[500],
+                          child: Column(
+                            children: <Widget>[
+
+                              Icon(
+                                getIconForName(iconNames[1]),
+                                color: Color(0xffFC0000),
+                                size: displayWidth(context) / 13,
+
+                              ),
+                              Text('${actionkeys[1]}'),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          color: Colors.amber[100],
+                          child: Column(
+                            children: <Widget>[
+
+                              Icon(
+                                getIconForName(iconNames[2]),
+                                color: Color(0xffFC0000),
+                                size: displayWidth(context) / 13,
+
+                              ),
+                              Text('${actionkeys[2]}'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+
+                  ),
+                  Container(
+                    color: Colors.deepOrange,
+//                                  color:Color(0xffDAD7C3),
+
+//                      margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+//                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+//                      width: displayWidth(context) * 0.57,
+                    child:
+
+                    Container(
+                      height: 150,
+                      width: 220,//300-80,
+                      color: Colors.amber[500],
+                      child: const Center(child: Text('Entry B')),
+                    ),
+
+
+                  )
+
+                ],
+              ),
+            ),
+
+
+
+
+            Container(
+              height: displayHeight(context)/22,
+              child: Row(
+                children: <Widget>[
+                  Text('This is so delicious pizza which we'
+                      'offer for our customers from our unique menu',
+                    style: TextStyle(
+                      fontFamily: 'Itim-Regular',
+                      color: Color(0xff3F5362),
+                    ),
+
+                  ),
+                ],
+              ),
+            ),
+
+
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
+                ],
+              ),
+            ),
+
+
+
+          ],
+        )
+    );
 
 
   }
+
+
 
   Widget offersAnimatedWidget(Restaurant oneRestaurant){
 
@@ -1175,6 +1333,20 @@ class _MyStatelessWidgetState extends State<ClientHome> {
       case 'DinningRoom': {
         return Icons.fastfood;
       }
+//      ;;
+      break;
+      case 'share': {
+        return Icons.share;
+      }
+      break;
+      case 'favorite': {
+        return Icons.star_border;
+      }
+      break;
+      case 'love': {
+        return Icons.favorite_border;
+      }
+//      ;;
 
       case 'Card': {
         return FontAwesomeIcons.solidCreditCard;
