@@ -24,6 +24,7 @@ class Restaurant {
   String  name;
   double  rating;
   double  totalRating;
+  int     selectedTabIndex; // {0:menu}, {1:offer}, {2:cart};
 
 //  address map, attribute map, cousine array, kid_friendly boolean, offday array,
 //      open String, reservation boolean, romantic: boolean, avatar: String, contact: string,
@@ -61,6 +62,7 @@ class Restaurant {
         this.name,
         this.rating,
         this.totalRating,
+        this.selectedTabIndex:0,
         // this.foodItemOrderID,
       }
       );

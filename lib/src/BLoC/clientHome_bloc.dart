@@ -451,7 +451,7 @@ class ClientHomeBloc implements Bloc {
       borderColor: '0xff739DFA',
       index: 0,
       isSelected: true,
-      tabTypeName: 'Menu',
+      tabTypeName: 'menu',
       iconDataString: 'FontAwesomeIcons.facebook',
       tabIconName: 'flight_takeoff',
     );
@@ -460,7 +460,7 @@ class ClientHomeBloc implements Bloc {
       borderColor: '0xff739DFA',
       index: 1,
       isSelected: false,
-      tabTypeName: 'Offer',
+      tabTypeName: 'offers',
       iconDataString: 'FontAwesomeIcons.facebook',
       tabIconName: 'flight_takeoff',
     );
@@ -471,7 +471,7 @@ class ClientHomeBloc implements Bloc {
       borderColor: '0xff739DFA',
       index: 2,
       isSelected: false,
-      tabTypeName: 'Cart',
+      tabTypeName: 'cart',
       iconDataString: 'FontAwesomeIcons.facebook',
       tabIconName: 'flight_takeoff',
     );
@@ -509,17 +509,17 @@ class ClientHomeBloc implements Bloc {
 
 
     // THIS IS NOT REQUIRED FOR THIS PAGE. Order currentOrderTemp AND currentOrderTemp.orderTypeIndex
-//    Order currentOrderTemp = _curretnOrder;
-//    currentOrderTemp.orderTypeIndex=newIndex;
+    Restaurant currentRestaurantTemp = _thisRestaurant;
+    currentRestaurantTemp.selectedTabIndex =newIndex;
 
 
     _allTabTypes = tempSingleSelectTabArray; // important otherwise => The getter 'sizedFoodPrices' was called on null.
 
-//    _curretnOrder = currentOrderTemp;
+    _thisRestaurant = currentRestaurantTemp;
 
 //    initiateAllMultiSelectOptions();
     _clientHomeTabController.sink.add(_allTabTypes);
-//    _orderController.sink.add(_curretnOrder);
+    _restaurantController.sink.add(_thisRestaurant);
   }
 
   // 4

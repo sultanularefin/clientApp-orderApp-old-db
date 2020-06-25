@@ -954,10 +954,6 @@ class _FoodGalleryState extends State<FoodGallery2> {
             ),
           ],
         ),
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-
         // Populate the Drawer in the next step.
       ),
     );
@@ -968,36 +964,6 @@ class _FoodGalleryState extends State<FoodGallery2> {
 
 
   Widget shoppingCartWidget(){
-
-
-//    final bloc = LocationQueryBloc();
-
-//    final blocZZ = FoodItemsQueryBloc();
-
-//    BlocProvider2.of(context).getFoodItemDetailsBlockObject;
-    // I AM NOT USING THIS HERE.
-//    final blocD = BlocProvider2.of(context).getFoodItemDetailsBlockObject;
-
-
-//    final foodItemDetailsBlocForOrderProcessing = BlocProvider.of<
-//        FoodItemDetailsBloc>(context);
-//    final bloc = BlocProvider.of<FoodGalleryBloc>(context);
-
-
-    /*
-Widget work1(BuildContext context){
-  BlocProvider(
-    bloc: ,
-    child: ,
-//
-  )
-
-  */
-
-    // NOT REQUIRED THIS STREAM WILL BE REQUIRED IN SHOPPING CART PAGE.
-    // PLANNED TO PASS IT FROM HERE.
-    // HOW CAN I HAVE IT HERE ????
-
 
     return Container(
 //                                                                        width:60,
@@ -1012,69 +978,19 @@ Widget work1(BuildContext context){
           print(
               ' method for old Outline button that deals with navigation to Shopping Cart Page');
 
-          // work 01.
-
-//          orderFG
-
-
-//      final foodItemDetailsbloc = BlocProvider.of<FoodItemDetailsBloc>(context);
-
-
-
-//              final locationBloc = BlocProvider.of<>(context);
-//                                    foodItemDetailsbloc.incrementThisIngredientItem(unSelectedOneIngredient,index);
-
           CustomerInformation oneCustomerInfo = new CustomerInformation(
             address: '',
             flatOrHouseNumber: '',
             phoneNumber: '',
             etaTimeInMinutes: -1,
-//        CustomerInformation currentUser = _oneCustomerInfo;
-//    currentUser.address = address;
-//
-
           );
-
-          /*
-      CustomerInformation oneCustomerInfo = new CustomerInformation(
-        address:'',
-        flatOrHouseNumber:'',
-        phoneNumber:'',
-        etaTimeInMinutes:-1,
-//        CustomerInformation currentUser = _oneCustomerInfo;
-//    currentUser.address = address;
-//
-
-      );
-      */
-
-          /*
-      Order x = new Order(
-        foodItemName: foodItemDetailsbloc.currentFoodItem.itemName,
-        foodItemImageURL: foodItemDetailsbloc.currentFoodItem.imageURL,
-        unitPrice:initialPriceByQuantityANDSize ,
-        foodDocumentId: foodItemDetailsbloc.currentFoodItem.documentId,
-        quantity: _itemCount,
-        foodItemSize: _currentSize,
-        ingredients: foodItemDetailsbloc.getDefaultIngredients,
-        orderTypeIndex: 0,
-        paymentTypeIndex: 4,
-        ordersCustomer:oneCustomerInfo,
-      );
-
-      */
 
           orderFG.selectedFoodInOrder = allSelectedFoodGallery;
           orderFG.selectedFoodListLength = allSelectedFoodGallery.length;
           orderFG.totalPrice= totalPriceState;
           orderFG.ordersCustomer = oneCustomerInfo;
-          print(
+          print('add_shopping_cart button pressed');
 
-              'add_shopping_cart button pressed');
-
-          //          Navigator.of(context).push(
-
-//          return
           final bool isCancelButtonPressed = await Navigator.of(context).push(
 
             PageRouteBuilder(

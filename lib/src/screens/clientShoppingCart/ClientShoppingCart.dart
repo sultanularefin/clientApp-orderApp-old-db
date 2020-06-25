@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:linkupclient/src/BLoC/bloc_provider.dart';
+import 'package:linkupclient/src/BLoC/clientShopping_bloc.dart';
 //import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
-import 'package:linkupclient/src/BLoC/shoppingCart_bloc.dart';
+
 import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
 //import 'package:linkupclient/src/screens/foodGallery/foodgallery2.dart';
 
@@ -35,7 +36,7 @@ final Firestore firestore = Firestore();
 
 
 
-class ShoppingCart extends StatefulWidget {
+class ClientShoppingCart extends StatefulWidget {
 //  AdminFirebase({this.firestore});
 
 
@@ -46,7 +47,7 @@ class ShoppingCart extends StatefulWidget {
 //  FoodItemWithDocID oneFoodItem =new FoodItemWithDocID(
 
 
-  ShoppingCart({Key key, this.child}) : super(key: key);
+  ClientShoppingCart({Key key, this.child}) : super(key: key);
 
   @override
   _ShoppingCartState createState() => new _ShoppingCartState();
@@ -57,7 +58,7 @@ class ShoppingCart extends StatefulWidget {
 }
 
 
-class _ShoppingCartState extends State<ShoppingCart> {
+class _ShoppingCartState extends State<ClientShoppingCart> {
 
 
 //  var logger = Logger(
@@ -121,7 +122,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   Widget build(BuildContext context) {
-    final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return GestureDetector(
         onTap: () {
@@ -151,8 +152,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
               StreamBuilder<Order>(
 
 
-                  stream: shoppingCartBloc.getCurrentOrderStream,
-                  initialData: shoppingCartBloc.getCurrentOrder,
+                  stream: blocS.getCurrentOrderStream,
+                  initialData: blocS.getCurrentOrder,
 
                   builder: (context, snapshot) {
 //            if (snapshot.hasData) {
@@ -291,15 +292,15 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                     curve: Neumorphic.DEFAULT_CURVE,
                                     style: NeumorphicStyle(
-                                        shape: NeumorphicShape
-                                            .concave,
-                                        depth: 8,
-                                        lightSource: LightSource
-                                            .topLeft,
-                                        color: Colors.white,
-                                        boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
+                                      shape: NeumorphicShape
+                                          .concave,
+                                      depth: 8,
+                                      lightSource: LightSource
+                                          .topLeft,
+                                      color: Colors.white,
+                                      boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
 
-                          ),
+                                      ),
                                     ),
 
 
@@ -707,11 +708,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //   width: displayWidth(context) * 0.57,
 
 
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return StreamBuilder(
-        stream: shoppingCartbloc.getCurrentOrderTypeSingleSelectStream,
-        initialData: shoppingCartbloc.getCurrentOrderType,
+        stream: blocS.getCurrentOrderTypeSingleSelectStream,
+        initialData: blocS.getCurrentOrderType,
 
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -722,7 +723,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
           else {
             List<OrderTypeSingleSelect> allOrderTypesSingleSelect = snapshot.data;
 
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+//            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 
             print('orderTypes: $allOrderTypesSingleSelect');
             OrderTypeSingleSelect selectedOne = allOrderTypesSingleSelect.firstWhere((oneOrderType) =>
@@ -758,13 +759,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Widget animatedWidgetShowSelectedOrderType() {
 
 
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return Container(
       height: displayHeight(context) / 9,
       child: StreamBuilder(
-          stream: shoppingCartbloc.getCurrentOrderTypeSingleSelectStream,
-          initialData: shoppingCartbloc.getCurrentOrderType,
+          stream: blocS.getCurrentOrderTypeSingleSelectStream,
+          initialData: blocS.getCurrentOrderType,
 
           builder: (context, snapshot)
           {
@@ -776,7 +777,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             else {
               List<OrderTypeSingleSelect> allOrderTypesSingleSelect = snapshot.data;
 
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+//            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 
 //            print('orderTypes: $allOrderTypesSingleSelect');
               OrderTypeSingleSelect selectedOne = allOrderTypesSingleSelect
@@ -935,9 +936,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         ),
                         onPressed: () {
 
-                          //final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                          //final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-                          //shoppingCartBloc.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
+                          //blocS.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
 
                           // only one instance of this animatedWidgetShowSelectedOrderType() IS AVAILABLE AND IN below ().
                           // animatedWidgetShowSelectedOrderType()
@@ -1059,11 +1060,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //   height: 40,
 //   width: displayWidth(context) * 0.57,
 
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return StreamBuilder<List<SelectedFood>>(
-        stream: shoppingCartbloc.getExpandedFoodsStream,
-        initialData: shoppingCartbloc.getExpandedSelectedFood,
+        stream: blocS.getExpandedFoodsStream,
+        initialData: blocS.getExpandedSelectedFood,
 
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -1073,7 +1074,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //            logger.e(
 //                'selectedFoodListLength: ${qTimes.selectedFoodListLength}');
 
-//    final foodItemDetailsbloc = BlocProvider.of<ShoppingCartBloc>(context);
+//    final foodItemDetailsbloc = BlocProvider.of<ClientShoppingBloc>(context);
 
             if (expandedSelectedFoodInOrder == null) {
               print('Order has no data');
@@ -1417,11 +1418,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
   Widget animatedShowUserAddressDetailsInLineTakeAway(CustomerInformation currentUserForInline){
 
-//    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+//    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
 //    return StreamBuilder(
-//        stream: shoppingCartbloc.getCurrentOrderTypeSingleSelectStream,
-//        initialData: shoppingCartbloc.getCurrentOrderType,
+//        stream: blocS.getCurrentOrderTypeSingleSelectStream,
+//        initialData: blocS.getCurrentOrderType,
 //
 //        builder: (context, snapshot)
 //        {
@@ -1433,7 +1434,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //          else {
 //            List<OrderTypeSingleSelect> allOrderTypesSingleSelect = snapshot.data;
 //
-////            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+////            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 //
 //            print('orderTypes: $allOrderTypesSingleSelect');
 //            OrderTypeSingleSelect selectedOne = allOrderTypesSingleSelect
@@ -1584,9 +1585,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
 
-                            //final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                            //final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-                            //shoppingCartBloc.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
+                            //blocS.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
 
 //                    setState(() {
 //                      showFullOrderType = !showFullOrderType;
@@ -1954,11 +1955,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   Widget animatedShowUserAddressDetailsInLine(CustomerInformation currentUserForInline) {
 
-//    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+//    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
 //    return StreamBuilder(
-//        stream: shoppingCartbloc.getCurrentOrderTypeSingleSelectStream,
-//        initialData: shoppingCartbloc.getCurrentOrderType,
+//        stream: blocS.getCurrentOrderTypeSingleSelectStream,
+//        initialData: blocS.getCurrentOrderType,
 //
 //        builder: (context, snapshot)
 //        {
@@ -1970,7 +1971,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //          else {
 //            List<OrderTypeSingleSelect> allOrderTypesSingleSelect = snapshot.data;
 //
-////            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+////            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 //
 //            print('orderTypes: $allOrderTypesSingleSelect');
 //            OrderTypeSingleSelect selectedOne = allOrderTypesSingleSelect
@@ -2124,9 +2125,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
 
-                            //final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                            //final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-                            //shoppingCartBloc.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
+                            //blocS.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
 
 //                    setState(() {
 //                      showFullOrderType = !showFullOrderType;
@@ -2892,9 +2893,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                               print('at address of unobsecured (deliver loc)');
 
-                                              final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setAddressForOrder(text);
+                                              blocS.setAddressForOrder(text);
                                               if((text.trim().length) >0){
                                                 print('at (text.trim().length) >0)');
                                                 setState(() =>
@@ -3125,10 +3126,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             ),
 
                                             onChanged: (text) {
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc
+                                              blocS
                                                   .setHouseorFlatNumberForOrder(text);
 
                                               setState(() => showFullOrderType = false);
@@ -3327,10 +3328,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             onChanged: (text) {
                                               print("33: $text");
 
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setPhoneNumberForOrder(
+                                              blocS.setPhoneNumberForOrder(
                                                   text);
 
                                               setState(() => showFullOrderType = false);
@@ -3522,10 +3523,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
                                               print("33: $text");
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 
-                                              shoppingCartBloc.setETAForOrder(text);
+                                              blocS.setETAForOrder(text);
                                               setState(() {
                                                 showFullOrderType = false;
 
@@ -4041,9 +4042,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                               print('at address of unobsecured (deliver loc)');
 
-                                              final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setAddressForOrder(text);
+                                              blocS.setAddressForOrder(text);
                                               if((text.trim().length) >0){
                                                 print('at (text.trim().length) >0)');
                                                 setState(() =>
@@ -4274,10 +4275,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             ),
 
                                             onChanged: (text) {
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc
+                                              blocS
                                                   .setHouseorFlatNumberForOrder(text);
 
                                               setState(() => showFullOrderType = false);
@@ -4476,10 +4477,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             onChanged: (text) {
                                               print("33: $text");
 
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setPhoneNumberForOrder(
+                                              blocS.setPhoneNumberForOrder(
                                                   text);
 
                                               setState(() => showFullOrderType = false);
@@ -4671,10 +4672,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
                                               print("33: $text");
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 
-                                              shoppingCartBloc.setETAForOrder(text);
+                                              blocS.setETAForOrder(text);
                                               setState(() {
                                                 showFullOrderType = false;
 
@@ -5165,9 +5166,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
                                               print('at address of unobsecured (deliver loc)');
 
-                                              final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setAddressForOrder(text);
+                                              blocS.setAddressForOrder(text);
                                               if((text.trim().length) >0){
                                                 print('at (text.trim().length) >0)');
                                                 setState(()
@@ -5415,10 +5416,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             ),
 
                                             onChanged: (text) {
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc
+                                              blocS
                                                   .setHouseorFlatNumberForOrder(text);
 
                                               setState((){
@@ -5628,10 +5629,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             onChanged: (text) {
                                               print("33: $text");
 
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 //
-                                              shoppingCartBloc.setPhoneNumberForOrder(
+                                              blocS.setPhoneNumberForOrder(
                                                   text);
 
                                               setState((){
@@ -5841,10 +5842,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
                                               print("33: $text");
-                                              final shoppingCartBloc = BlocProvider.of<
-                                                  ShoppingCartBloc>(context);
+                                              final blocS = BlocProvider.of<
+                                                  ClientShoppingBloc>(context);
 
-                                              shoppingCartBloc.setETAForOrder(text);
+                                              blocS.setETAForOrder(text);
                                               setState(() {
                                                 // showFullOrderType = false;
                                                 showFullOrderType
@@ -6129,11 +6130,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Widget _buildShoppingCartInputFieldsObscured( CustomerInformation obscuredDisplay){
 
     //    CustomerInformation
-//  final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+//  final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //
 //  return StreamBuilder(
-//      stream: shoppingCartBloc.getCurrentCustomerInformationStream,
-//      initialData: shoppingCartBloc.getCurrentCustomerInfo,
+//      stream: blocS.getCurrentCustomerInformationStream,
+//      initialData: blocS.getCurrentCustomerInfo,
 //
 //      builder: (context, snapshot) {
 //        if (!snapshot.hasData) {
@@ -6260,10 +6261,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           onChanged: (text) {
                             //RRRR
 
-                            final shoppingCartBloc = BlocProvider.of<
-                                ShoppingCartBloc>(context);
+                            final blocS = BlocProvider.of<
+                                ClientShoppingBloc>(context);
 //
-                            shoppingCartBloc.setAddressForOrder(text);
+                            blocS.setAddressForOrder(text);
 
                             setState(() {
                               // showFullOrderType = false;
@@ -6429,10 +6430,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
 
                           onChanged: (text) {
-                            final shoppingCartBloc = BlocProvider.of<
-                                ShoppingCartBloc>(context);
+                            final blocS = BlocProvider.of<
+                                ClientShoppingBloc>(context);
 //
-                            shoppingCartBloc
+                            blocS
                                 .setHouseorFlatNumberForOrder(
                                 text);
 
@@ -6614,10 +6615,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           onChanged: (text) {
                             print("33: $text");
 
-                            final shoppingCartBloc = BlocProvider.of<
-                                ShoppingCartBloc>(context);
+                            final blocS = BlocProvider.of<
+                                ClientShoppingBloc>(context);
 //
-                            shoppingCartBloc.setPhoneNumberForOrder(
+                            blocS.setPhoneNumberForOrder(
                                 text);
 
                             setState(() {
@@ -6779,10 +6780,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
                             print("33: $text");
-                            final shoppingCartBloc = BlocProvider.of<
-                                ShoppingCartBloc>(context);
+                            final blocS = BlocProvider.of<
+                                ClientShoppingBloc>(context);
 
-                            shoppingCartBloc.setETAForOrder(text);
+                            blocS.setETAForOrder(text);
                             setState((){ showFullOrderType = false;
 
 //                            showCustomerInformationHeader = false;
@@ -7204,8 +7205,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   /*
                   cancelPaySelect.page=1;
                   return Navigator.of(context).pop(
-                      BlocProvider<ShoppingCartBloc>(
-                          bloc: ShoppingCartBloc(cancelPaySelect),
+                      BlocProvider<ClientShoppingBloc>(
+                          bloc: blocS(cancelPaySelect),
                       child:
                       BlocProvider<FoodGalleryBloc>(
                           bloc: FoodGalleryBloc(),
@@ -7214,9 +7215,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   ),);
                   */
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
-                  shoppingCartBloc.cancelButtonPressed();
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
+                  blocS.cancelButtonPressed();
                   return Navigator.pop(context,true);
                 },
               ),
@@ -7254,11 +7255,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //                  print('on Pressed of Pay');
 //                  return Navigator.pop(context,false);
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
 
 
-                  String docId = await shoppingCartBloc.paymentButtonPressed(cancelPaySelect);
+                  String docId = await blocS.paymentButtonPressed(cancelPaySelect);
 
                   _scaffoldKey.currentState
 //                  Scaffold.of(context)
@@ -7329,8 +7330,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   /*
                   cancelPaySelect.page=1;
                   return Navigator.of(context).pop(
-                      BlocProvider<ShoppingCartBloc>(
-                          bloc: ShoppingCartBloc(cancelPaySelect),
+                      BlocProvider<ClientShoppingBloc>(
+                          bloc: blocS(cancelPaySelect),
                       child:
                       BlocProvider<FoodGalleryBloc>(
                           bloc: FoodGalleryBloc(),
@@ -7339,9 +7340,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   ),);
                   */
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
-                  shoppingCartBloc.cancelButtonPressed();
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
+                  blocS.cancelButtonPressed();
                   return Navigator.pop(context,true);
                 },
               ),
@@ -7378,11 +7379,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //                  print('on Pressed of Pay');
 //                  return Navigator.pop(context,false);
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
 
 
-                  String docId = await shoppingCartBloc.paymentButtonPressed(cancelPaySelect);
+                  String docId = await blocS.paymentButtonPressed(cancelPaySelect);
 
                   _scaffoldKey.currentState
 //                  Scaffold.of(context)
@@ -7403,8 +7404,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   /*
                   cancelPaySelect.page=1;
                   return Navigator.of(context).pop(
-                    BlocProvider<ShoppingCartBloc>(
-                        bloc: ShoppingCartBloc(cancelPaySelect),
+                    BlocProvider<ClientShoppingBloc>(
+                        bloc: blocS(cancelPaySelect),
                         child:
                         BlocProvider<FoodGalleryBloc>(
                             bloc: FoodGalleryBloc(),
@@ -7413,12 +7414,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         )
                     ),);
                   */
-//                  shoppingCartBloc.cancelButtonPressed();
+//                  blocS.cancelButtonPressed();
 
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
-                  shoppingCartBloc.cancelButtonPressed();
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
+                  blocS.cancelButtonPressed();
 
 
 
@@ -7444,10 +7445,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
 
-                  final shoppingCartBloc = BlocProvider.of<
-                      ShoppingCartBloc>(context);
+                  final blocS = BlocProvider.of<
+                      ClientShoppingBloc>(context);
 
-                  String docId = await shoppingCartBloc.paymentButtonPressed(cancelPaySelect);
+                  String docId = await blocS.paymentButtonPressed(cancelPaySelect);
 
 //                  print('on Pressed of Pay of animatedUnObscuredCancelPayButtonTakeAway DocID=> $docId');
 
@@ -7495,14 +7496,14 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
 
   Widget animatedWidgetShowSelectedPaymentTypeTakeAway(Order unObsecuredInputandPayment){
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return Container(
       height: displayHeight(context) / 8.2,
 //      height: displayHeight(context) / 10,
       child: StreamBuilder(
-          stream: shoppingCartbloc.getCurrentPaymentTypeSingleSelectStream,
-          initialData: shoppingCartbloc.getCurrentPaymentType,
+          stream: blocS.getCurrentPaymentTypeSingleSelectStream,
+          initialData: blocS.getCurrentPaymentType,
 
           builder: (context, snapshot)
           {
@@ -7514,7 +7515,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             else {
               List<PaymentTypeSingleSelect> allPaymentTypesSingleSelect = snapshot.data;
 
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+//            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 
 //            print('orderTypes: $allOrderTypesSingleSelect');
               PaymentTypeSingleSelect selectedOne = allPaymentTypesSingleSelect
@@ -7683,9 +7684,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               ),
                               onPressed: () {
 
-                                //final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
-//                          final ShoppingCartBlock = BlocProvider.of<ShoppingCartBloc>(context);
-//                          ShoppingCartBlock.setPaymentTypeSingleSelectOptionForOrder(selectedOne,4,_currentOrderTypeIndex);
+                                //final blocS = BlocProvider.of<ClientShoppingBloc>(context);
+//                          final blocSk = BlocProvider.of<ClientShoppingBloc>(context);
+//                          blocSk.setPaymentTypeSingleSelectOptionForOrder(selectedOne,4,_currentOrderTypeIndex);
 
                                 setState(() {
 
@@ -7765,15 +7766,15 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //animatedWidgetShowSelectedPaymentTypeDeliveryPhone
   Widget animatedWidgetShowSelectedPaymentTypeDeliveryPhone(Order unObsecuredInputandPayment) {
 
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     // work -3
     return Container(
 //      height: displayHeight(context) / 9,
       height: displayHeight(context) / 8.2,
       child: StreamBuilder(
-          stream: shoppingCartbloc.getCurrentPaymentTypeSingleSelectStream,
-          initialData: shoppingCartbloc.getCurrentPaymentType,
+          stream: blocS.getCurrentPaymentTypeSingleSelectStream,
+          initialData: blocS.getCurrentPaymentType,
 
           builder: (context, snapshot)
           {
@@ -7785,7 +7786,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             else {
               List<PaymentTypeSingleSelect> allPaymentTypesSingleSelect = snapshot.data;
 
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+//            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 
 //            print('orderTypes: $allOrderTypesSingleSelect');
               PaymentTypeSingleSelect selectedOne = allPaymentTypesSingleSelect
@@ -7953,9 +7954,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               ),
                               onPressed: () {
 
-                                //final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
-//                          final ShoppingCartBlock = BlocProvider.of<ShoppingCartBloc>(context);
-//                          ShoppingCartBlock.setPaymentTypeSingleSelectOptionForOrder(selectedOne,4,_currentOrderTypeIndex);
+                                //final blocS = BlocProvider.of<ClientShoppingBloc>(context);
+//                          final blocSk = BlocProvider.of<ClientShoppingBloc>(context);
+//                          blocSk.setPaymentTypeSingleSelectOptionForOrder(selectedOne,4,_currentOrderTypeIndex);
 
                                 setState(() {
 
@@ -8750,9 +8751,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
           ),
           onPressed: () {
 
-            final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+            final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-            shoppingCartBloc.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
+            blocS.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
             // setState(()=>) NEEDED IN THE UNSELECTED PART,
             // WE NEED TO RENDER THEM AS THEY ARE IN THE FIRST
             // TIME.
@@ -8864,9 +8865,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
           ),
           onPressed: () {
 
-            final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+            final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-            shoppingCartBloc.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
+            blocS.setOrderTypeSingleSelectOptionForOrder(x,index,_currentOrderTypeIndex);
             // WORK -1
 
 
@@ -9115,11 +9116,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 //   width: displayWidth(context) * 0.57,
 
 
-    final shoppingCartbloc = BlocProvider.of<ShoppingCartBloc>(context);
+    final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 
     return StreamBuilder(
-        stream: shoppingCartbloc.getCurrentPaymentTypeSingleSelectStream,
-        initialData: shoppingCartbloc.getCurrentPaymentType,
+        stream: blocS.getCurrentPaymentTypeSingleSelectStream,
+        initialData: blocS.getCurrentPaymentType,
 
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -9130,7 +9131,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
           else {
             List<PaymentTypeSingleSelect> allPaymentTypesSingleSelect = snapshot.data;
 
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+//            List<OrderTypeSingleSelect> orderTypes = blocS.getCurrentOrderType;
 
             print('paymentTypes: $allPaymentTypesSingleSelect');
 
@@ -9301,10 +9302,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
           ),
           onPressed: () {
 
-            final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+            final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
 //    void setPaymentTypeSingleSelectOptionForOrder(PaymentTypeSingleSelect x, int newPaymentIndex,int oldPaymentIndex){
-            shoppingCartBloc.setPaymentTypeSingleSelectOptionForOrder(onePaymentType,index,_currentPaymentTypeIndex);
+            blocS.setPaymentTypeSingleSelectOptionForOrder(onePaymentType,index,_currentPaymentTypeIndex);
 
             // oneSinglePaymentType
             setState(() {
@@ -9405,9 +9406,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
           ),
           onPressed: () {
 
-            final shoppingCartBloc = BlocProvider.of<ShoppingCartBloc>(context);
+            final blocS = BlocProvider.of<ClientShoppingBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-            shoppingCartBloc.setPaymentTypeSingleSelectOptionForOrder(onePaymentType,index,_currentPaymentTypeIndex);
+            blocS.setPaymentTypeSingleSelectOptionForOrder(onePaymentType,index,_currentPaymentTypeIndex);
 
 
             // oneSinglePaymentType

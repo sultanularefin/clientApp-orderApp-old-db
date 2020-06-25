@@ -2,6 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:linkupclient/src/BLoC/clientShopping_bloc.dart';
+import 'package:linkupclient/src/DataLayer/models/CustomerInformation.dart';
+import 'package:linkupclient/src/DataLayer/models/Order.dart';
+import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
+import 'package:linkupclient/src/screens/clientShoppingCart/ClientShoppingCart.dart';
 import 'package:logger/logger.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
 
@@ -45,7 +50,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   // STATE VARIABLES begins here. .
   String _currentCategory = "pizza";
   String _firstTimeCategoryString = "";
-  int _currentTabTypeIndex =0; // {0: menu, 1:offer, 2: cart}.
+//  int _currentTabTypeIndex =0;
+
 
   // STATE VARIABLES ends here. .
 
@@ -53,7 +59,10 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   @override
   Widget build(BuildContext context) {
 
+
     var logger = Logger();
+
+
 
     logger.d("Logger is working!");
     final blocH = BlocProvider.of<ClientHomeBloc>(context);
@@ -123,357 +132,466 @@ class _MyStatelessWidgetState extends State<ClientHome> {
       body: // FOODLIST LOADED FROM FIRESTORE NOT FROM STATE HERE
       SafeArea(child:
       SingleChildScrollView(
-          child:
+        child:StreamBuilder<Restaurant>(
 
-          Row(
+          stream: blocH.getCurrentRestaurantsStream,
+          initialData: blocH.getCurrentRestaurant,
 
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container(
+                  alignment: Alignment.topCenter,
+                  child: new LinearProgressIndicator());
+            }
+            else {
+              //   print('snapshot.hasData FDetails: ${snapshot.hasData}');
+
+              final Restaurant oneRestaurant = snapshot.data;
+              int _currentTabTypeIndex = oneRestaurant.selectedTabIndex; // {0: menu, 1:offer, 2: cart}.
+//                      color: Color.fromARGB(255, 255,255,255),
+              return Container(child:
+
+              Row(
+
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 
 
 //                #### 1ST CONTAINER SEARCH STRING AND TOTAL ADD TO CART PRICE.
 
-              Expanded(
-                  child: Column(
+                  Expanded(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
 
-                      mainAxisAlignment: MainAxisAlignment.start,
+                            // 1ST CONTAINER RESTAURANT INFORMATION BEGINS HERE.
+                            Container(
 
-                      children: <Widget>[
-
-
-                        // 1ST CONTAINER RESTAURANT INFORMATION BEGINS HERE.
-                        Container(
-
-                          height: displayHeight(context) / 14,
+                              height: displayHeight(context) / 14,
 //                          width :displayWidth(context) -(MediaQuery
 //                              .of(context)
 //                              .size
 //                              .width / 5.8) -3,
-                          color: Color(0xffFFFFFF),
-                          child: StreamBuilder<Restaurant>(
+                              color: Color(0xffFFFFFF),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceAround,
+                                children: <Widget>[
+                                  // CONTAINER FOR TOTAL PRICE CART BELOW.
+                                  Container(
+                                    width: displayWidth(context) /10,
+                                    height: displayWidth(context) /7,
+                                    padding:EdgeInsets.symmetric(vertical: 7,horizontal: 5),
+                                    decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+//          borderRadius: BorderRadius.circular(25),
+                                      border: Border.all(
 
-                            stream: blocH.getCurrentRestaurantsStream,
-                            initialData: blocH.getCurrentRestaurant,
+                                        color: Color(0xff000000),
+                                        style: BorderStyle.solid,
+                                        width: 1,
 
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Container(
-                                    alignment: Alignment.topCenter,
-                                    child: new LinearProgressIndicator());
-                              }
-                              else {
-                                //   print('snapshot.hasData FDetails: ${snapshot.hasData}');
 
-                                final Restaurant oneRestaurant = snapshot.data;
-//                      color: Color.fromARGB(255, 255,255,255),
-                                return Container(child:
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceAround,
-                                  children: <Widget>[
-                                    // CONTAINER FOR TOTAL PRICE CART BELOW.
-                                    Container(
-                                      width: displayWidth(context) /10,
-                                      height: displayWidth(context) /7,
-                                      padding:EdgeInsets.symmetric(vertical: 7,horizontal: 5),
-                                      child:ClipOval(
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+//                                          707070
+//                                              color:Color(0xffEAB45E),
+// good yellow color
+//                                            color:Color(0xff000000),
+                                            color: Color(
+                                                0xffEAB45E),
+// adobe xd color
+//                                              color: Color.fromRGBO(173, 179, 191, 1.0),
+                                            blurRadius: 30.0,
+                                            spreadRadius: 0.7,
+                                            offset: Offset(0, 10)
+                                        )
+                                      ],
+                                    ),
+                                    child:ClipOval(
 
-                                        child: CachedNetworkImage(
-                                          imageUrl: oneRestaurant.avatar,
-                                          fit: BoxFit.cover,
-                                          placeholder: (context,
-                                              url) => new LinearProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Image.network(
-                                                  'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
+                                      child: CachedNetworkImage(
+                                        imageUrl: oneRestaurant.avatar,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context,
+                                            url) => new LinearProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Image.network(
+                                                'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
 //
-                                        ),
                                       ),
                                     ),
+                                  ),
 
-                                    Container(
+                                  Container(
 
-                                      child: Text('${oneRestaurant.name}'), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
-
-                                    ),
-
-                                  ],
-                                ),
-                                );
-
-                              }
-                            },
-                          ),
-                        ),
-
-                        //1ST CONTAINER RESTAURANT INFORMATION ENDS HERE.
-
-
-                        Container(
-                          height: displayHeight(context) / 14,
-                          color: Color(0xffFFFFFF),
-//                      color: Color.fromARGB(255, 255,255,255),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .spaceAround,
-                            children: <Widget>[
-
-
-                              // CONTAINER FOR TOTAL PRICE CART BELOW.
-
-
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 0,
-                                    vertical: 0),
-                                decoration: BoxDecoration(
-//                                      shape: BoxShape.circle,
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(
-
-                                    color: Color(0xffBCBCBD),
-                                    style: BorderStyle.solid,
-                                    width: 3,
-
+                                    child: Text('${oneRestaurant.name}'), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
 
                                   ),
 
-                                  boxShadow: [
-                                    BoxShadow(
+                                ],
+                              ),
+
+
+                            ),
+
+                            //1ST CONTAINER RESTAURANT INFORMATION ENDS HERE.
+
+
+
+                            Container(
+                              height: displayHeight(context) / 14,
+                              color: Color(0xffFFFFFF),
+//                      color: Color.fromARGB(255, 255,255,255),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceAround,
+                                children: <Widget>[
+
+
+                                  // CONTAINER FOR TOTAL PRICE CART BELOW.
+
+
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 0,
+                                        vertical: 0),
+                                    decoration: BoxDecoration(
+//                                      shape: BoxShape.circle,
+                                      borderRadius: BorderRadius.circular(25),
+                                      border: Border.all(
+
+                                        color: Color(0xffBCBCBD),
+                                        style: BorderStyle.solid,
+                                        width: 3,
+
+
+                                      ),
+
+                                      boxShadow: [
+                                        BoxShadow(
 //                                            color: Color.fromRGBO(250, 200, 200, 1.0),
-                                        color: Color(0xffFFFFFF),
-                                        blurRadius: 10.0,
-                                        // USER INPUT
-                                        offset: Offset(0.0, 2.0))
-                                  ],
+                                            color: Color(0xffFFFFFF),
+                                            blurRadius: 10.0,
+                                            // USER INPUT
+                                            offset: Offset(0.0, 2.0))
+                                      ],
 
 
-                                  color: Color(0xffFFFFFF),
+                                      color: Color(0xffFFFFFF),
 //                                      Colors.black54
-                                ),
-                                // USER INPUT
+                                    ),
+                                    // USER INPUT
 
 
 //                                  color: Color(0xffFFFFFF),
-                                width: displayWidth(context) / 3,
-                                height: displayHeight(context) / 27,
-                                padding: EdgeInsets.only(
-                                    left: 4, top: 3, bottom: 3, right: 3),
-                                child: Row(
+                                    width: displayWidth(context) / 3,
+                                    height: displayHeight(context) / 27,
+                                    padding: EdgeInsets.only(
+                                        left: 4, top: 3, bottom: 3, right: 3),
+                                    child: Row(
 //                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center,
-                                  children: <Widget>[
-                                    Container(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceAround,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .center,
+                                      children: <Widget>[
+                                        Container(
 
-                                      height:displayWidth(context)/34,
+                                          height:displayWidth(context)/34,
 //                                          height: 25,
-                                      width: 5,
-                                      margin: EdgeInsets.only(left: 0,right:15,bottom: 5),
+                                          width: 5,
+                                          margin: EdgeInsets.only(left: 0,right:15,bottom: 5),
 //                    decoration: BoxDecoration(
 //                      shape: BoxShape.circle,
 //                      color: Colors.white,
 //                    ),
-                                      // work 1
-                                      child: Icon(
+                                          // work 1
+                                          child: Icon(
 //                                          Icons.add_shopping_cart,
-                                        Icons.search,
+                                            Icons.search,
 //                                            size: 28,
-                                        size: displayWidth(context)/24,
-                                        color: Color(0xffBCBCBD),
-                                      ),
+                                            size: displayWidth(context)/24,
+                                            color: Color(0xffBCBCBD),
+                                          ),
 
 
-                                    ),
+                                        ),
 
-                                    Container(
+                                        Container(
 //                                        margin:  EdgeInsets.only(
 //                                          right:displayWidth(context) /32 ,
 //                                        ),
-                                      alignment: Alignment.center,
-                                      width: displayWidth(context) / 4.7,
+                                          alignment: Alignment.center,
+                                          width: displayWidth(context) / 4.7,
 //                                        color:Colors.purpleAccent,
-                                      // do it in both Container
-                                      child: TextField(
-                                        decoration: InputDecoration(
+                                          // do it in both Container
+                                          child: TextField(
+                                            decoration: InputDecoration(
 //                                            prefixIcon: new Icon(Icons.search),
 //                                        borderRadius: BorderRadius.all(Radius.circular(5)),
 //                                        border: Border.all(color: Colors.white, width: 2),
-                                          border: InputBorder.none,
+                                              border: InputBorder.none,
 //                                              hintText: 'Search about meal',
 //                                              hintStyle: TextStyle(fontWeight: FontWeight.bold),
 
 
 //                                        labelText: 'Search about meal.'
-                                        ),
-                                        onChanged: (text) {
+                                            ),
+                                            onChanged: (text) {
 //                                              logger.i('on onChanged of condition 4');
 
 
-                                          print(
-                                              "First text field from Condition 04: $text");
-                                        },
-                                        onTap: () {
-                                          print('condition 4');
+                                              print(
+                                                  "First text field from Condition 04: $text");
+                                            },
+                                            onTap: () {
+                                              print('condition 4');
 //                                              logger.i('on Tap of condition 4');
 
-                                        },
+                                            },
 
-                                        onEditingComplete: () {
+                                            onEditingComplete: () {
 //                                              logger.i('onEditingComplete  of condition 4');
-                                          print(
-                                              'called onEditing complete');
+                                              print(
+                                                  'called onEditing complete');
 
-                                        },
+                                            },
 
-                                        onSubmitted: (String value) async {
-                                          await showDialog<void>(
-                                            context: context,
-                                            builder: (
-                                                BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Thanks!'),
-                                                content: Text(
-                                                    'You typed "$value".'),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(
-                                                          context);
-                                                    },
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
+                                            onSubmitted: (String value) async {
+                                              await showDialog<void>(
+                                                context: context,
+                                                builder: (
+                                                    BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Thanks!'),
+                                                    content: Text(
+                                                        'You typed "$value".'),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text('OK'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
-                                          );
-                                        },
-                                      ),
+                                          ),
 
-                                    )
+                                        )
 
 //                                  Spacer(),
 
 //                                  Spacer(),
 
-                                  ],
-                                ),
-                              ),
-
-                              Container(
-
-                                child: futureWidget(), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
-
-                              ),
-
-                            ],
-                          ),
-                        ),
-
-
-
-                        // CONTAINER FOR TOTAL PRICE CART ABOVE.
-                        Container(
-                          height: displayHeight(context) -
-                              MediaQuery
-                                  .of(context)
-                                  .padding
-                                  .top - displayHeight(context) / 13,
-                          padding: EdgeInsets.fromLTRB(
-                              20, 0, 10, 0),
-                          // FOR CATEGORY SERARCH.
-
-                          child: Container(
-                              color: Colors.white,
-                              child:Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    height: displayHeight(context) / 22,
-                                    child: Text('best selling'),
-
-                                  ),
-                                  Container(
-                                      height: displayHeight(context) / 9,
-                                      color: Color(0xfff4444aa),
-                                      child: buildBestSelling(context)
+                                      ],
+                                    ),
                                   ),
 
                                   Container(
-                                    height: displayHeight(context) /11,
-                                    color: Color(0xffFFFFFF),
-                                    child: _buildMenuOfferCartTypeSingleSelectOption(),
+
+                                    child: futureWidget(), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
+
                                   ),
-
-
 
                                 ],
-                              )
+                              ),
+                            ),
 
 
 
-                            // Todo DefaultItemsStreamBuilder
+
+                            // CONTAINER FOR TOTAL PRICE CART ABOVE.
+                            Container(
+                              height: displayHeight(context) / 9 + displayHeight(context) / 22,
+                              padding: EdgeInsets.fromLTRB(
+                                  0, 0, 0, 0),
+                              // FOR CATEGORY SERARCH.
+
+                              child: Container(
+                                  color: Colors.white,
+                                  child:Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        height: displayHeight(context) / 30,
+                                        padding:EdgeInsets.fromLTRB(4,0,0,0),
+                                        child: Text('best selling',style: TextStyle(
+                                          fontFamily: 'Itim-Regular',
+                                        ),),
+
+                                      ),
+                                      Container(
+                                          height: displayHeight(context) / 9,
+                                          color: Color(0xfff4444aa),
+                                          child: buildBestSelling(context)
+                                      ),
 
 
-                          ),
 
-                          /*
+
+
+                                    ],
+                                  )
+
+
+
+                                // Todo DefaultItemsStreamBuilder
+
+
+                              ),
+
+                              /*
                                 child: foodList( /*_currentCategory,_searchString,
                                     context *//*allIngredients:_allIngredientState */),
                                 */
 
-                        ),
+                            ),
 
-                      ]
-                  )
-              ),
-              //EXPANDED WIDGET ENDS HERE
 
-              Container(
-                alignment: Alignment.topCenter,
-                height: displayHeight(context) -
-                    MediaQuery
-                        .of(context)
-                        .padding
-                        .top + displayHeight(context) / 20,
+                            Container(
+                              height: displayHeight(context) /11,
+//                          color: Colors.blueGrey,
+                              child: StreamBuilder(
+                                  stream: blocH.getCurrentTabTypeSingleSelectStream,
+                                  initialData: blocH.getCurrentTabType,
+
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+                                      return Container(child: Text('Null'));
+                                    }
+                                    else {
+                                      List<MenuOfferCartTabTypeSingleSelect> allTabTypeSingleSelect = snapshot.data;
+
+//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+
+                                      logger.e('allTabTypeSingleSelect: $allTabTypeSingleSelect');
+
+                                      MenuOfferCartTabTypeSingleSelect selectedOne =
+                                      allTabTypeSingleSelect.firstWhere((oneOrderType) =>
+                                      oneOrderType.isSelected==true);
+
+                                      _currentTabTypeIndex = selectedOne.index;
+
+
+                                      return ListView.builder(
+                                        shrinkWrap: false,
+//              reverse:true,
+//                                    padding: EdgeInsets.all(0),
+                                        padding:EdgeInsets.all(0.0),
+//              margin: EdgeInsets.all(0),
+
+                                        scrollDirection: Axis.horizontal,
+
+                                        itemCount: allTabTypeSingleSelect.length,
+
+                                        itemBuilder: (_, int index) {
+                                          return oneSingleTabType(
+                                              allTabTypeSingleSelect[index],
+                                              index,_currentTabTypeIndex);
+                                        },
+                                      );
+                                    }
+                                  }
+
+                                // M VSM ORG VS TODO. ENDS HERE.
+                              ),
+                            ),
+
+
+
+
+                            Container(
+                              color: Colors.yellowAccent,
+//                                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+//                                        width: displayWidth(context) /1.8,
+                              width: displayWidth(context) / 1.1,
+//                                            height: displayHeight(context)/2.5,
+                              // THIS HEIGHT SHOULDN'T BE GIVEN OTHERWISE
+                              // A CERTAIN PORTION OF OF THE CONTAINER
+                              // WITH YELLOW ACCENT BG COLOR IS
+                              // THERE WHEN THE CHILD WIDGETS ARE NOT
+                              // BIG ENOGH LIKE , AS BIG AS displayHeight(context)/2.5,
+
+
+                              //Text('AnimatedSwitcher('),
+                              child:  AnimatedSwitcher(
+                                duration: Duration(milliseconds: 300),
+
+                                child: _currentTabTypeIndex == 1 ?
+                                offersAnimatedWidget(
+                                    oneRestaurant):
+                                menuAnimatedWidget(
+                                    oneRestaurant)
+                                ,
+//                                        animatedObscuredTextInputContainer (oneOrder.ordersCustomer),
+
+                              ),
+
+
+                            ),
+
+
+
+
+
+
+                          ]
+                      )
+                  ),
+                  //EXPANDED WIDGET ENDS HERE
+
+                  Container(
+                    alignment: Alignment.topCenter,
+                    height: displayHeight(context) -
+                        MediaQuery
+                            .of(context)
+                            .padding
+                            .top + displayHeight(context) / 20,
 
 //                          color: Color.fromARGB(255, 84, 70, 62),
 //              child:Text('ss'),
 
-                child:
-                Container(
-                  height: displayHeight(context) -
-                      MediaQuery
-                          .of(context)
-                          .padding
-                          .top - displayHeight(context) / 13,
+                    child:
+                    Container(
+                      height: displayHeight(context) -
+                          MediaQuery
+                              .of(context)
+                              .padding
+                              .top - displayHeight(context) / 13,
 //                          height:800,
 //                          padding:EdgeInsets.symmetric(horizontal: 0,vertical: displayHeight(context)/13),
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 5.8,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 5.8,
 //              color: Colors.yellowAccent,
 //                    color: Color(0xff54463E),
-                  color: Color(0xffFFE18E),
+                      color: Color(0xffFFE18E),
 
-                  child: StreamBuilder<List<NewCategoryItem>>(
+                      child: StreamBuilder<List<NewCategoryItem>>(
 
-                      stream: blocH.categoryItemsStream,
-                      initialData: blocH.allCategories,
+                          stream: blocH.categoryItemsStream,
+                          initialData: blocH.allCategories,
 //        initialData: bloc.getAllFoodItems(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                              child: new LinearProgressIndicator());
-                        }
-                        else {
-                          final List allCategories = snapshot.data;
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                  child: new LinearProgressIndicator());
+                            }
+                            else {
+                              final List allCategories = snapshot.data;
 //                                  logger.i('allCategories.length:', allCategories.length);
 
 
@@ -483,8 +601,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                                  allCategories.add(all);
 //                                  logger.i('allCategories.length after :', allCategories.length);
 
-                          final int categoryCount = allCategories
-                              .length;
+                              final int categoryCount = allCategories
+                                  .length;
 
 
 //                              print('categoryCount in condition 04: ');
@@ -492,33 +610,40 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 //                                logger.i("categoryCount in condition 04: $categoryCount");
 
-                          return (
-                              new ListView.builder
-                                (
-                                  itemCount: categoryCount,
+                              return (
+                                  new ListView.builder
+                                    (
+                                      itemCount: categoryCount,
 
 
-                                  //    itemBuilder: (BuildContext ctxt, int index) {
-                                  itemBuilder: (_, int index) {
+                                      //    itemBuilder: (BuildContext ctxt, int index) {
+                                      itemBuilder: (_, int index) {
 //                                            return (Text('ss'));
 
 
-                                    return _buildCategoryRow(
-                                        allCategories[index]
-                                        /*categoryItems[index]*/,
-                                        index);
-                                  }
+                                        return _buildCategoryRow(
+                                            allCategories[index]
+                                            /*categoryItems[index]*/,
+                                            index);
+                                      }
+                                  )
                               )
-                          )
-                          ;
+                              ;
 
-                        }
-                      }
+                            }
+                          }
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ]
-            ,)
+                ]
+                ,)
+
+              );
+
+            }
+          },
+        ),
+
 
       ),
       ),
@@ -527,6 +652,24 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
   }
+
+
+  Widget menuAnimatedWidget(Restaurant oneRestaurant){
+
+
+    return Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}');
+
+
+  }
+
+  Widget offersAnimatedWidget(Restaurant oneRestaurant){
+
+
+    return Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}');
+
+
+  }
+
 
   //now now
   /* DEAFULT INGREDIENT ITEMS BUILD STARTS HERE.*/
@@ -737,82 +880,32 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-  Widget _buildMenuOfferCartTypeSingleSelectOption(){
-
-    final blocH = BlocProvider.of<ClientHomeBloc>(context);
-
-    return StreamBuilder(
-        stream: blocH.getCurrentTabTypeSingleSelectStream,
-        initialData: blocH.getCurrentTabType,
-
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            print('!snapshot.hasData');
-//        return Center(child: new LinearProgressIndicator());
-            return Container(child: Text('Null'));
-          }
-          else {
-            List<MenuOfferCartTabTypeSingleSelect> allTabTypeSingleSelect = snapshot.data;
-
-//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
-
-            print('orderTypes: $allTabTypeSingleSelect');
-            MenuOfferCartTabTypeSingleSelect selectedOne = allTabTypeSingleSelect.firstWhere((oneOrderType) =>
-            oneOrderType.isSelected==true);
-            _currentTabTypeIndex = selectedOne.index;
-
-            return ListView.builder(
-              padding: EdgeInsets.all(0),
-//              margin: EdgeInsets.all(0),
-
-              scrollDirection: Axis.horizontal,
-
-              itemCount: allTabTypeSingleSelect.length,
-
-              itemBuilder: (_, int index) {
-                return oneSingleTabType(
-                    allTabTypeSingleSelect[index],
-                    index);
-              },
-            );
-          }
-        }
-
-      // M VSM ORG VS TODO. ENDS HERE.
-    );
-
-  }
 
 
 //  oneSingleDeliveryType to be replaced with oneSinglePaymentType
-  Widget oneSingleTabType (MenuOfferCartTabTypeSingleSelect oneTabOption,int index){
+  Widget oneSingleTabType (MenuOfferCartTabTypeSingleSelect oneTabOption,int index,int currentTabIndex){
 
 
     var logger = Logger();
+    logger.e('oneTabOption: ${oneTabOption.tabTypeName}');
 
     String oneTabTypeName = oneTabOption.tabTypeName;
     String oneTabIconName = oneTabOption.tabIconName;
     String borderColor    = oneTabOption.borderColor;
-    return Container(
-      color:Colors.deepOrange,
-      height: displayHeight(context) /11,
-      padding: EdgeInsets.all(0),
-      margin: EdgeInsets.all(0),
+    if(index <2) {
+      return InkWell(
+        highlightColor: Colors.lightGreenAccent,
 
-//      width: 90,
 
 //      height:displayHeight(context)/30,
 //      width:displayWidth(context)/10,
 
-      child:  index == _currentTabTypeIndex  ?
-
-      OutlineButton(
-        highlightColor:Colors.lightGreenAccent,
-//          splashColor,
-        child:Container(
-          color:Colors.lightBlue,
-          width: 90,
-          height: displayHeight(context) /11,
+        child: index == currentTabIndex ?
+        Container(
+//        color:Colors.lightGreenAccent,
+          width: displayWidth(context) / 3.5,
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          height: displayHeight(context) / 11,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -821,8 +914,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
               new Container(
 
-                width:  displayWidth(context)/9.5,
-                height: displayWidth(context)/9.5,
+                width: displayWidth(context) / 9.5,
+                height: displayWidth(context) / 9.5,
                 decoration: BoxDecoration(
                   border: Border.all(
 //                    color: Colors.black,
@@ -835,7 +928,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                 child: Icon(
                   getIconForName(oneTabTypeName),
                   color: Color(0xffFC0000),
-                  size: displayWidth(context)/11,
+                  size: displayWidth(context) / 13,
 
                 ),
 
@@ -843,12 +936,13 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
               Container(
 
-                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 2),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
 //                  alignment: Alignment.center,
                 child: Text(
                   oneTabTypeName, style:
                 TextStyle(
-                    color:Color(0xffFC0000),
+                    fontFamily: 'Itim-Regular',
+                    color: Color(0xffFC0000),
 
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
@@ -856,36 +950,16 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               ),
             ],
           ),
-        ),
-        onPressed: () {
-          logger.w('sss');
-
-          final blocH = BlocProvider.of<ClientHomeBloc>(context);
-//              final locationBloc = BlocProvider.of<>(context);
-          blocH.setTabTypeSingleSelectOptionForHomePage(oneTabOption,index, _currentTabTypeIndex);
+        )
 
 
-//            showEditingCompleteCustomerAddressInformation   = false;
-//            showEditingCompleteCustomerHouseFlatIformation = false;
-//            showEditingCompleteCustomerPhoneIformation     = false;
-//            showEditingCompleteCustomerReachoutIformation  = false;
-
-          // WORK -2
-
-
-        },
-      )
-      // : Container for 2nd argument of ternary condition ends here.
-          :
-
-      OutlineButton(
-
-        highlightColor:Colors.lightGreenAccent,
-//          splashColor,
-        child:Container(
-          color:Colors.lightBlue,
-          width: 90,
-          height: displayHeight(context) /11,
+        // : Container for 2nd argument of ternary condition ends here.
+            :
+        Container(
+//        color:Colors.lightBlue,
+          width: displayWidth(context) / 3.5,
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          height: displayHeight(context) / 11,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -894,8 +968,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
               new Container(
 
-                width:  displayWidth(context)/9.5,
-                height: displayWidth(context)/9.5,
+                width: displayWidth(context) / 9.5,
+                height: displayWidth(context) / 9.5,
                 decoration: BoxDecoration(
                   border: Border.all(
 //                    color: Colors.black,
@@ -908,18 +982,19 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                 child: Icon(
                   getIconForName(oneTabTypeName),
                   color: Colors.grey,
-                  size: displayWidth(context)/11,
+                  size: displayWidth(context) / 13,
                 ),
 
               ),
 
               Container(
 
-                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 2),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
 //                  alignment: Alignment.center,
                 child: Text(
                   oneTabTypeName, style:
                 TextStyle(
+                    fontFamily: 'Itim-Regular',
                     color: Colors.grey,
 
                     fontWeight: FontWeight.bold,
@@ -929,15 +1004,145 @@ class _MyStatelessWidgetState extends State<ClientHome> {
             ],
           ),
         ),
-        onPressed: () {
+
+
+        onTap: () {
+          logger.w('sss');
 
           final blocH = BlocProvider.of<ClientHomeBloc>(context);
 //              final locationBloc = BlocProvider.of<>(context);
-          blocH.setTabTypeSingleSelectOptionForHomePage(oneTabOption,index, _currentTabTypeIndex);
+          blocH.setTabTypeSingleSelectOptionForHomePage(
+              oneTabOption, index, currentTabIndex);
+
+
+//            showEditingCompleteCustomerAddressInformation   = false;
+//            showEditingCompleteCustomerHouseFlatIformation = false;
+//            showEditingCompleteCustomerPhoneIformation     = false;
+//            showEditingCompleteCustomerReachoutIformation  = false;
+
+          // WORK -2
+
+
         },
-      ),
-      // : Container for 2nd argument of ternary condition ends here.
-    );
+
+        // : Container for 2nd argument of ternary condition ends here.
+      );
+    }else{
+
+      return InkWell(
+        highlightColor: Colors.lightGreenAccent,
+
+
+//      height:displayHeight(context)/30,
+//      width:displayWidth(context)/10,
+
+
+        child:Container(
+//        color:Colors.lightGreenAccent,
+          width: displayWidth(context) / 3.5,
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          height: displayHeight(context) / 11,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: <Widget>[
+
+              new Container(
+
+                width: displayWidth(context) / 9.5,
+                height: displayWidth(context) / 9.5,
+                decoration: BoxDecoration(
+                  border: Border.all(
+//                    color: Colors.black,
+                    color: Colors.black,
+                    style: BorderStyle.solid,
+                    width: 1.0,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  getIconForName(oneTabTypeName),
+                  color: Colors.grey,
+                  size: displayWidth(context) / 13,
+
+                ),
+
+              ),
+
+              Container(
+
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+//                  alignment: Alignment.center,
+                child: Text(
+                  oneTabTypeName, style:
+                TextStyle(
+                    fontFamily: 'Itim-Regular',
+                    color: Colors.grey,
+
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),onTap: () async {
+
+
+        Order orderFG = new Order(
+          selectedFoodInOrder: [],
+          selectedFoodListLength:0,
+          orderTypeIndex: 0, // phone, takeaway, delivery, dinning.
+          paymentTypeIndex: 2, //2; PAYMENT OPTIONS ARE LATER(0), CASH(1) CARD(2||Default)
+          ordersCustomer: null,
+          totalPrice: 0,
+          page:0,
+        );
+
+        List<SelectedFood> allSelectedFoodGallery = [];
+
+        CustomerInformation oneCustomerInfo = new CustomerInformation(
+          address: '',
+          flatOrHouseNumber: '',
+          phoneNumber: '',
+          etaTimeInMinutes: -1,
+        );
+
+        orderFG.selectedFoodInOrder = allSelectedFoodGallery;
+        orderFG.selectedFoodListLength = allSelectedFoodGallery.length;
+        orderFG.totalPrice= 10.0;
+        orderFG.ordersCustomer = oneCustomerInfo;
+        print('add_shopping_cart button pressed');
+
+        final bool isCancelButtonPressed = await Navigator.of(context).push(
+
+          PageRouteBuilder(
+            opaque: false,
+            transitionDuration: Duration(
+                milliseconds: 900),
+            pageBuilder: (_, __, ___) =>
+                BlocProvider<ClientShoppingBloc>(
+                    bloc: ClientShoppingBloc(orderFG),
+                    child: ClientShoppingCart()
+
+                ),
+
+          ),
+        );
+
+        print('isCancelButtonPressed: $isCancelButtonPressed');
+
+
+//    return BlocProvider<ClientShoppingBloc>(
+//        bloc: ClientShoppingBloc(orderFG),
+//        child: ClientShoppingCart()
+//
+//    );
+
+      },
+      );
+
+    }
   }
 
 
@@ -976,15 +1181,15 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
       }
       break;
-      case 'Offer': {
+      case 'offers': {
         return Icons.local_offer;
       }
       break;
-      case 'Cart': {
+      case 'cart': {
         return Icons.add_shopping_cart;
       }
       break;
-      case 'Menu': {
+      case 'menu': {
         return Icons.restaurant;
       }
       break;
@@ -1001,6 +1206,59 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
+
+  navigateToshoppingCartPage() async{
+
+    Order orderFG = new Order(
+      selectedFoodInOrder: [],
+      selectedFoodListLength:0,
+      orderTypeIndex: 0, // phone, takeaway, delivery, dinning.
+      paymentTypeIndex: 2, //2; PAYMENT OPTIONS ARE LATER(0), CASH(1) CARD(2||Default)
+      ordersCustomer: null,
+      totalPrice: 0,
+      page:0,
+    );
+
+    List<SelectedFood> allSelectedFoodGallery = [];
+
+    CustomerInformation oneCustomerInfo = new CustomerInformation(
+      address: '',
+      flatOrHouseNumber: '',
+      phoneNumber: '',
+      etaTimeInMinutes: -1,
+    );
+
+    orderFG.selectedFoodInOrder = allSelectedFoodGallery;
+    orderFG.selectedFoodListLength = allSelectedFoodGallery.length;
+    orderFG.totalPrice= 10.0;
+    orderFG.ordersCustomer = oneCustomerInfo;
+    print('add_shopping_cart button pressed');
+
+    final bool isCancelButtonPressed = await Navigator.of(context).push(
+
+      PageRouteBuilder(
+        opaque: false,
+        transitionDuration: Duration(
+            milliseconds: 900),
+        pageBuilder: (_, __, ___) =>
+            BlocProvider<ClientShoppingBloc>(
+                bloc: ClientShoppingBloc(orderFG),
+                child: ClientShoppingCart()
+
+            ),
+
+      ),
+    );
+
+    print('isCancelButtonPressed: $isCancelButtonPressed');
+
+
+//    return BlocProvider<ClientShoppingBloc>(
+//        bloc: ClientShoppingBloc(orderFG),
+//        child: ClientShoppingCart()
+//
+//    );
+  }
 
   _navigateAndDisplaySelection(BuildContext context,FoodItemWithDocID oneFoodItem) async {
 
