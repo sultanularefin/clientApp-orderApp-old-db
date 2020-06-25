@@ -77,41 +77,16 @@ class ShoppingCartBloc implements Bloc {
 
 
   ShoppingCartBloc(
-      /*FoodItemWithDocID oneFoodItem, List<NewIngredient> allIngsScoped */
-
-
       Order x
       ) {
 
-    /*
-    if(x.page==1){
-      cancelButtonPressed();
-
-    }
-    else {
-  */
-//      logger.e('enterred into ShoppingCartBloc ');
-
-//    Order x = new Order(
-//      foodItemName: foodItemDetailsbloc.currentFoodItem.itemName,
-//      foodItemImageURL: foodItemDetailsbloc.currentFoodItem.imageURL,
-//      unitPrice:initialPriceByQuantityANDSize ,
-//      foodDocumentId: foodItemDetailsbloc.currentFoodItem.documentId,
-//      quantity: _itemCount,
-//      foodItemSize: _currentSize,
-//      ingredients: foodItemDetailsbloc.getDefaultIngredients,
-//    );
-
-
-//    getAllIngredients();
-
-//    List<NewIngredient> allIngsScoped= _allIngItems;
     print("at the begin of Constructor [ShoppingCartBloc]");
 
 //    print('food Item name in Shopping Cart BlocK ${x.foodItemName}');
 
     print('x.paymentTypeIndex: ${x.paymentTypeIndex}');
     int paymentTypeIndex = x.paymentTypeIndex;
+
     initiateOrderTypeSingleSelectOptions();
 
     initiatePaymentTypeSingleSelectOptions(paymentTypeIndex);

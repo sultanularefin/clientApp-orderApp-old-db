@@ -1,76 +1,32 @@
-// Flutter code sample for AppBar
-
-// This sample shows an [AppBar] with two simple actions. The first action
-// opens a [SnackBar], while the second action navigates to a new page.
 
 import 'package:flutter/material.dart';
-import 'package:linkupclient/src/BLoC/bloc_provider.dart';
-import 'package:linkupclient/src/DataLayer/models/Restaurant.dart';
-import 'package:linkupclient/src/utilities/screen_size_reducers.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:logger/logger.dart';
+//import 'package:flutter_icons/flutter_icons.dart';
+
+// MODELS ==>
 import 'package:linkupclient/src/DataLayer/models/newCategory.dart';
+import 'package:linkupclient/src/DataLayer/models/FoodItemWithDocID.dart';
+import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
+import 'package:linkupclient/src/DataLayer/models/Restaurant.dart';
+
+// MODELS ==>
+
+
+// BLOC'S
+import 'package:linkupclient/src/BLoC/bloc_provider.dart';
+
+
 import 'package:linkupclient/src/BLoC/clientHome_bloc.dart';
 
-//void main() => runApp(MyApp());
+// BLOC'S
 
-/// This Widget is the main application widget.
-///
-///
-///
-//class ClientHome extends StatelessWidget {
-//  static const String _title = 'Flutter Code Sample';
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: _title,
-//      home: MyStatelessWidget(),
-//    );
-//  }
-//}
+//helpers.
+import 'package:linkupclient/src/utilities/screen_size_reducers.dart';
 
 
 
-
-/*
-void openPage(BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: 9,
-                vertical: 0),
-
-            width: displayWidth(context) / 5,
-            height: displayHeight(context) / 21,
-            child: Image.asset('assets/Path2008.png'),
-
-          ),
-        ),
-        body: const Center(
-          child: Text(
-            'This is the next page',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      );
-    },
-  ));
-}
-*/
-
-//Container(
-//margin: EdgeInsets.symmetric(
-//horizontal: 9,
-//vertical: 0),
-//
-//width: displayWidth(context) / 5,
-//height: displayHeight(context) / 21,
-//child: Image.asset('assets/Path2008.png'),
-//
-//),
 
 /// This is the stateless widget that the main application instantiates.
 class ClientHome extends StatefulWidget {
@@ -86,14 +42,20 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   final GlobalKey<ScaffoldState> scaffoldKeyClientHome = GlobalKey<ScaffoldState>();
   final SnackBar snackBar = const SnackBar(content: Text('Menu button pressed'));
 
-  // STATE VARIABLES .
+  // STATE VARIABLES begins here. .
   String _currentCategory = "pizza";
   String _firstTimeCategoryString = "";
+  int _currentTabTypeIndex =0; // {0: menu, 1:offer, 2: cart}.
+
+  // STATE VARIABLES ends here. .
 
 
   @override
   Widget build(BuildContext context) {
 
+    var logger = Logger();
+
+    logger.d("Logger is working!");
     final blocH = BlocProvider.of<ClientHomeBloc>(context);
     return GestureDetector(
       onTap: () {
@@ -412,36 +374,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                           ),
                         ),
 
-                        Container(
-                          height: displayHeight(context) / 20,
-                          color: Color(0xffffffff),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
 
-                                Spacer(),
-                                CustomPaint(size: Size(0, 19),
-                                  painter: LongHeaderPainterBefore(context),
-                                ),
-                                Text('${_currentCategory.toLowerCase()}',
-                                  style:
-                                  TextStyle(
-
-                                    fontFamily: 'Itim-Regular',
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.normal,
-//                    fontStyle: FontStyle.italic,
-                                    color: Color(0xff000000),
-                                  ),
-                                ),
-                                CustomPaint(size: Size(0, 19),
-                                  painter: LongHeaderPainterAfter(context),
-                                ),
-                                Spacer(),
-                              ]
-                          ),
-                        ),
 
                         // CONTAINER FOR TOTAL PRICE CART ABOVE.
                         Container(
@@ -454,7 +387,40 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                               20, 0, 10, 0),
                           // FOR CATEGORY SERARCH.
 
-                          child: Text('foodList'),
+                          child: Container(
+                              color: Colors.white,
+                              child:Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    height: displayHeight(context) / 22,
+                                    child: Text('best selling'),
+
+                                  ),
+                                  Container(
+                                      height: displayHeight(context) / 9,
+                                      color: Color(0xfff4444aa),
+                                      child: buildBestSelling(context)
+                                  ),
+
+                                  Container(
+                                    height: displayHeight(context) /11,
+                                    color: Color(0xffFFFFFF),
+                                    child: _buildMenuOfferCartTypeSingleSelectOption(),
+                                  ),
+
+
+
+                                ],
+                              )
+
+
+
+                            // Todo DefaultItemsStreamBuilder
+
+
+                          ),
 
                           /*
                                 child: foodList( /*_currentCategory,_searchString,
@@ -558,7 +524,491 @@ class _MyStatelessWidgetState extends State<ClientHome> {
       ),
     ),
     );
+
+
   }
+
+  //now now
+  /* DEAFULT INGREDIENT ITEMS BUILD STARTS HERE.*/
+  Widget buildBestSelling(BuildContext context /*,List<NewIngredient> defaltIngs*/){
+
+
+//    defaultIngredients
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+//    final blocD = BlocProvider.of<ClientHome>(context);
+//    final blocD = BlocProvider2.of(context).getFoodItemDetailsBlockObject;
+//    final foodItemDetailsbloc = BlocProvider.of<FoodItemDetailsBloc>(context);
+
+    return StreamBuilder(
+        stream: blocH.bestSellingFoodItemsStream,
+        initialData: blocH.getAllBestSellingFoodItems,
+
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+
+            print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+            return
+              Container(
+                height: displayHeight(context) / 9,
+                child: Text("No Ingredients, Please Select 1 or more",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
+
+
+                ),
+              );
+          }
+
+          else {
+
+            print('snapshot.hasData and else statement at FDetailS2');
+            List<FoodItemWithDocID> bestSellingFoods = snapshot.data;
+
+            if( (bestSellingFoods==null) ||(bestSellingFoods.length ==0)){
+
+              return Container(
+                  height: displayHeight(context) / 9,
+//          height:190,
+
+//              color: Colors.yellowAccent,
+//                    color: Color(0xff54463E),
+                  color: Color(0xFFffffff),
+                  alignment: Alignment.center,
+
+                  // PPPPP
+
+                  child:(
+                      Text("No best selling foods found",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )
+                  )
+              );
+            }
+
+            else{
+              return Container(
+                height: displayHeight(context) / 9,
+                color: Color(0xFFffffff),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+
+//                                          itemCount: sizeConstantsList.length,
+                  itemCount: bestSellingFoods.length,
+
+                  itemBuilder: (_, int index) {
+
+//                  print(
+//                      'valuePrice at line # 583: $valuePrice and key is $key');
+                    return oneBestSellingFoodItem(bestSellingFoods[index],index
+                    );
+                  },
+
+//      controller: new ScrollController(
+//          keepScrollOffset: false),
+                  shrinkWrap: false,
+                ),
+
+              );
+            }
+          }
+        }
+    );
+  }
+
+
+  Widget oneBestSellingFoodItem(FoodItemWithDocID oneSelectedFood,int index){
+    final String ingredientName = oneSelectedFood.itemName;
+//                  final dynamic ingredientImageURL = document['image'];
+//    final num ingredientPrice = document['price'];
+
+    print('------- --- - oneSelectedFood.imageURL ----------- --  : ${oneSelectedFood.imageURL}');
+
+    final dynamic ingredientImageURL = oneSelectedFood.imageURL == '' ?
+    'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2FfoodItem404.jpg?alt=media'
+        :
+    oneSelectedFood.imageURL;
+
+
+//    print('ingredientImageUR L   L    L   L: $ingredientImageURL');
+
+    return Container(
+//            color: Color.fromRGBO(239, 239, 239, 0),
+      width: displayWidth(context) /5,
+      height: displayHeight(context) / 9,
+      color: Color(0xFF34acdf),
+      padding: EdgeInsets.fromLTRB(
+//                          horizontal: 10.0, vertical: 22.0),
+          4, 3,4,1),
+      child: InkWell(
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+
+            new Container(
+
+//                                width: displayWidth(context) * 0.09,
+//                                height: displayWidth(context) * 0.11,
+              width: displayWidth(context) /7,
+              height: displayHeight(context) /13,
+              padding:EdgeInsets.symmetric(vertical: 3),
+//        horizontal: 3
+
+              decoration: new BoxDecoration(
+                shape: BoxShape.circle,
+//          borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+
+                  color: Color(0xff000000),
+                  style: BorderStyle.solid,
+                  width: 3,
+
+
+                ),
+                boxShadow: [
+                  BoxShadow(
+//                                          707070
+//                                              color:Color(0xffEAB45E),
+// good yellow color
+//                                            color:Color(0xff000000),
+                      color: Color(
+                          0xffEAB45E),
+// adobe xd color
+//                                              color: Color.fromRGBO(173, 179, 191, 1.0),
+                      blurRadius: 30.0,
+                      spreadRadius: 0.7,
+                      offset: Offset(0, 10)
+                  )
+                ],
+              ),
+
+              child: ClipOval(
+
+                child: CachedNetworkImage(
+                  imageUrl: ingredientImageURL,
+                  fit: BoxFit.cover,
+                  placeholder: (context,
+                      url) => new LinearProgressIndicator(),
+                  errorWidget: (context, url, error) =>
+                      Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
+//
+                ),
+              ),
+
+            ),
+//                              SizedBox(height: 10),
+            Text(
+
+              ingredientName,
+
+              style: TextStyle(
+                color: Color.fromRGBO(112, 112, 112, 1),
+//                                    color: Colors.blueGrey[800],
+
+                fontWeight: FontWeight.normal,
+                fontSize: 10,
+              ),
+            )
+            ,
+
+
+          ],
+        ),
+
+        onTap: () {
+          _navigateAndDisplaySelection(
+              context, oneSelectedFood);
+        },
+      ),
+
+    );
+  }
+
+
+
+
+
+  Widget _buildMenuOfferCartTypeSingleSelectOption(){
+
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+
+    return StreamBuilder(
+        stream: blocH.getCurrentTabTypeSingleSelectStream,
+        initialData: blocH.getCurrentTabType,
+
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+            return Container(child: Text('Null'));
+          }
+          else {
+            List<MenuOfferCartTabTypeSingleSelect> allTabTypeSingleSelect = snapshot.data;
+
+//            List<OrderTypeSingleSelect> orderTypes = shoppingCartBloc.getCurrentOrderType;
+
+            print('orderTypes: $allTabTypeSingleSelect');
+            MenuOfferCartTabTypeSingleSelect selectedOne = allTabTypeSingleSelect.firstWhere((oneOrderType) =>
+            oneOrderType.isSelected==true);
+            _currentTabTypeIndex = selectedOne.index;
+
+            return ListView.builder(
+              padding: EdgeInsets.all(0),
+//              margin: EdgeInsets.all(0),
+
+              scrollDirection: Axis.horizontal,
+
+              itemCount: allTabTypeSingleSelect.length,
+
+              itemBuilder: (_, int index) {
+                return oneSingleTabType(
+                    allTabTypeSingleSelect[index],
+                    index);
+              },
+            );
+          }
+        }
+
+      // M VSM ORG VS TODO. ENDS HERE.
+    );
+
+  }
+
+
+//  oneSingleDeliveryType to be replaced with oneSinglePaymentType
+  Widget oneSingleTabType (MenuOfferCartTabTypeSingleSelect oneTabOption,int index){
+
+
+    var logger = Logger();
+
+    String oneTabTypeName = oneTabOption.tabTypeName;
+    String oneTabIconName = oneTabOption.tabIconName;
+    String borderColor    = oneTabOption.borderColor;
+    return Container(
+      color:Colors.deepOrange,
+      height: displayHeight(context) /11,
+      padding: EdgeInsets.all(0),
+      margin: EdgeInsets.all(0),
+
+//      width: 90,
+
+//      height:displayHeight(context)/30,
+//      width:displayWidth(context)/10,
+
+      child:  index == _currentTabTypeIndex  ?
+
+      OutlineButton(
+        highlightColor:Colors.lightGreenAccent,
+//          splashColor,
+        child:Container(
+          color:Colors.lightBlue,
+          width: 90,
+          height: displayHeight(context) /11,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: <Widget>[
+
+              new Container(
+
+                width:  displayWidth(context)/9.5,
+                height: displayWidth(context)/9.5,
+                decoration: BoxDecoration(
+                  border: Border.all(
+//                    color: Colors.black,
+                    color: Colors.black,
+                    style: BorderStyle.solid,
+                    width: 1.0,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  getIconForName(oneTabTypeName),
+                  color: Color(0xffFC0000),
+                  size: displayWidth(context)/11,
+
+                ),
+
+              ),
+
+              Container(
+
+                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 2),
+//                  alignment: Alignment.center,
+                child: Text(
+                  oneTabTypeName, style:
+                TextStyle(
+                    color:Color(0xffFC0000),
+
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onPressed: () {
+          logger.w('sss');
+
+          final blocH = BlocProvider.of<ClientHomeBloc>(context);
+//              final locationBloc = BlocProvider.of<>(context);
+          blocH.setTabTypeSingleSelectOptionForHomePage(oneTabOption,index, _currentTabTypeIndex);
+
+
+//            showEditingCompleteCustomerAddressInformation   = false;
+//            showEditingCompleteCustomerHouseFlatIformation = false;
+//            showEditingCompleteCustomerPhoneIformation     = false;
+//            showEditingCompleteCustomerReachoutIformation  = false;
+
+          // WORK -2
+
+
+        },
+      )
+      // : Container for 2nd argument of ternary condition ends here.
+          :
+
+      OutlineButton(
+
+        highlightColor:Colors.lightGreenAccent,
+//          splashColor,
+        child:Container(
+          color:Colors.lightBlue,
+          width: 90,
+          height: displayHeight(context) /11,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: <Widget>[
+
+              new Container(
+
+                width:  displayWidth(context)/9.5,
+                height: displayWidth(context)/9.5,
+                decoration: BoxDecoration(
+                  border: Border.all(
+//                    color: Colors.black,
+                    color: Colors.black,
+                    style: BorderStyle.solid,
+                    width: 1.0,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  getIconForName(oneTabTypeName),
+                  color: Colors.grey,
+                  size: displayWidth(context)/11,
+                ),
+
+              ),
+
+              Container(
+
+                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 2),
+//                  alignment: Alignment.center,
+                child: Text(
+                  oneTabTypeName, style:
+                TextStyle(
+                    color: Colors.grey,
+
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onPressed: () {
+
+          final blocH = BlocProvider.of<ClientHomeBloc>(context);
+//              final locationBloc = BlocProvider.of<>(context);
+          blocH.setTabTypeSingleSelectOptionForHomePage(oneTabOption,index, _currentTabTypeIndex);
+        },
+      ),
+      // : Container for 2nd argument of ternary condition ends here.
+    );
+  }
+
+
+  IconData getIconForName(String iconName) {
+
+    print ('iconName at getIconForName: $iconName');
+    switch(iconName) {
+      case 'facebook': {
+//        return FontAwesomeIcons.facebook;
+        return FontAwesomeIcons.facebook;
+      }
+      break;
+
+      case 'twitter': {
+        return FontAwesomeIcons.twitter;
+      }
+      break;
+      case 'TakeAway': {
+        return Icons.work;
+      }
+      break;
+      case 'Delivery': {
+        return Icons.local_shipping;
+      }
+      break;
+      case 'Phone': {
+        return Icons.phone_in_talk;
+      }
+      break;
+      case 'DinningRoom': {
+        return Icons.fastfood;
+      }
+
+      case 'Card': {
+        return FontAwesomeIcons.solidCreditCard;
+
+      }
+      break;
+      case 'Offer': {
+        return Icons.local_offer;
+      }
+      break;
+      case 'Cart': {
+        return Icons.add_shopping_cart;
+      }
+      break;
+      case 'Menu': {
+        return Icons.restaurant;
+      }
+      break;
+
+
+
+
+
+      default: {
+        return FontAwesomeIcons.home;
+      }
+    }
+  }
+
+
+
+
+  _navigateAndDisplaySelection(BuildContext context,FoodItemWithDocID oneFoodItem) async {
+
+    print('at _navigateAndDisplaySelection');
+
+  }
+
+
 
   List<Widget> _getWords2(String text, String imageURL) {
 

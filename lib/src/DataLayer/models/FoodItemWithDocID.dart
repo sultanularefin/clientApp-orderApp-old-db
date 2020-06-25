@@ -25,6 +25,7 @@ class FoodItemWithDocID {
   String uploadedBy;
   String documentId;
   double discount;
+  int sl;
 
   FoodItemWithDocID(
       {
@@ -43,6 +44,7 @@ class FoodItemWithDocID {
         this.uploadedBy,
         this.documentId,
         this.discount,
+        this.sl,
       }
       );
 

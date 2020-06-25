@@ -2,8 +2,9 @@
 // BLOC
 //    import 'package:linkupclient/src/Bloc/
 import 'package:linkupclient/src/BLoC/bloc.dart';
+import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
 import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
-
+import 'package:logger/logger.dart';
 
 //MODELS
 //import 'package:linkupclient/src/DataLayer/itemData.dart';
@@ -29,6 +30,9 @@ import 'dart:async';
 //class LocationBloc implements Bloc {
 class ClientHomeBloc implements Bloc {
 
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   // id ,type ,title <= Location.
 
@@ -39,6 +43,7 @@ class ClientHomeBloc implements Bloc {
   Stream<Restaurant> get getCurrentRestaurantsStream => _restaurantController.stream;
 
   List<FoodItemWithDocID> _allFoodsList=[];
+  List<FoodItemWithDocID> _bestSelling =[];
 
   List<NewCategoryItem> _allCategoryList=[];
 
@@ -58,6 +63,7 @@ class ClientHomeBloc implements Bloc {
 
   List<FoodItemWithDocID> get allFoodItems => _allFoodsList;
   List<NewCategoryItem> get allCategories => _allCategoryList;
+  List<FoodItemWithDocID> get getAllBestSellingFoodItems => _bestSelling;
 
 
 
@@ -68,6 +74,8 @@ class ClientHomeBloc implements Bloc {
   // 1
   final _foodItemController = StreamController <List<FoodItemWithDocID>>();
   final _categoriesController = StreamController <List<NewCategoryItem>>();
+  final _bestSellingFoodItemsController = StreamController <List<FoodItemWithDocID>>();
+
 
 
 
@@ -85,59 +93,18 @@ class ClientHomeBloc implements Bloc {
   Stream<List<FoodItemWithDocID>> get foodItemsStream => _foodItemController.stream;
 
   Stream<List<NewCategoryItem>> get categoryItemsStream => _categoriesController.stream;
+  Stream<List<FoodItemWithDocID>> get bestSellingFoodItemsStream => _bestSellingFoodItemsController.stream;
 
 
 
+  List<MenuOfferCartTabTypeSingleSelect>   _allTabTypes;
+  List<MenuOfferCartTabTypeSingleSelect> get getCurrentTabType => _allTabTypes;
+
+  final _clientHomeTabController = StreamController <List<MenuOfferCartTabTypeSingleSelect>>.broadcast();
+  Stream  <List<MenuOfferCartTabTypeSingleSelect>> get getCurrentTabTypeSingleSelectStream =>
+      _clientHomeTabController.stream;
 
 
-  // 3
-  // CALLED LIKE THIS:
-
-  //  lib/UI/location_screen.dart:119:            locationBloc.selectLocation(location);
-  //  lib/UI/location_screen.dart:131:            locationBloc.selectLocation(location);
-
-  /*
-  void selectLocation(Location location) {
-    _location = location;
-    _locationController.sink.add(location);
-  }
-  */
-
-
-// this code bloc cut paste from foodGallery Bloc:
-
-
-  /*
-  Future<void> getRestaurantInformation() async{
-    var snapshot = await _client.fetchRestaurantData();
-    List docList = snapshot.documents;
-
-
-
-    List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
-        NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
-
-    ).toList();
-
-
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
-    ).toList();
-
-    // print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
-
-
-    _allIngItemsFGBloc = ingItems;
-
-    _allIngredientListController.sink.add(ingItems);
-
-
-//    return ingItems;
-  }
-
-  */
 
 
 
@@ -146,27 +113,6 @@ class ClientHomeBloc implements Bloc {
   Future<void> getRestaurantInformation() async{
 
     var snapshot = await _client.fetchRestaurantDataClient();
-
-    //    List docList = snapshot.documents;
-
-    /*
-    Map     <String,dynamic> address;
-    Map     <String,dynamic> attribute;
-    List    <dynamic> cousine;
-    bool    kidFriendly; // kid_friendly
-    bool    reservation;
-    bool    romantic;
-    List    <String> offday;
-    String  open;
-    String  avatar;
-    String  contact;
-    double  deliveryCharge;
-    double  discount;// from string;// need to convert string to double.
-    String  name;
-    double  rating;
-    double  totalRating;
-    */
-
 
 
     Map     <String,dynamic> restaurantAddress = snapshot['address'];
@@ -190,14 +136,7 @@ class ClientHomeBloc implements Bloc {
     // 'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/'
 
     print('restaurantAvatar: $restaurantAvatar');
-    //   https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages%2Fnoutupizzerai.png?
-    // alt=media&token=0a53af83-078f-4392-a1cf-e14cd584c6a1
 
-//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImagesnoutupizzerai.png?alt=media
-//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages/noutupizzerai.png?alt=media
-//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages/noutupizzerai.png?alt=media
-//    https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/restaurantImages%2Fnoutupizzerai.png?alt=media
-// restaurantImages/noutupizzerai.png
 
     String  restaurantContact= snapshot['contact'];
 
@@ -216,53 +155,6 @@ class ClientHomeBloc implements Bloc {
     double  restaurantRating =snapshot['rating'];
     double  restaurantTotalRating =snapshot['totalRating'];
 
-//      print('foodItemName $foodItemName');
-
-    /*
-      final String foodImageURL  = doc['image']==''?
-      'https://thumbs.dreamstime.com/z/smiling-orange-fruit-cartoon-mascot-character-holding-blank-sign-smiling-orange-fruit-cartoon-mascot-character-holding-blank-120325185.jpg'
-          :
-      storageBucketURLPredicate + Uri.encodeComponent(doc['image'])
-          +'?alt=media';
-      */
-//      print('doc[\'image\'] ${doc['image']}');
-
-
-
-    //final bool foodIsAvailable =  doc['available'];
-
-
-    //final Map<String,dynamic> oneFoodSizePriceMap = doc['size'];
-
-    // final List<dynamic> foodItemIngredientsList =  doc['ingredient'];
-//          logger.i('foodItemIngredientsList at getAllFoodDataFromFireStore: $foodItemIngredientsList');
-
-
-//          print('foodSizePrice __________________________${oneFoodSizePriceMap['normal']}');
-
-    // final String foodCategoryName = doc['category'];
-//      print('category: $foodCategoryName');
-
-    //final String foodItemDocumentID = doc.documentID;
-//      print('foodItemDocumentID $foodItemDocumentID');
-
-    //final double foodItemDiscount = doc['discount'];
-
-//      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
-
-
-    /*
-      FoodItemWithDocID oneFoodItemWithDocID = new FoodItemWithDocID(
-        itemName: foodItemName,
-        categoryName: foodCategoryName,
-        imageURL: foodImageURL,
-        sizedFoodPrices: oneFoodSizePriceMap,
-        ingredients: foodItemIngredientsList,
-        isAvailable: foodIsAvailable,
-        documentId: foodItemDocumentID,
-        discount: foodItemDiscount,
-      );
-      */
 
     Restaurant onlyRestaurant = new Restaurant(
       address:restaurantAddress,
@@ -329,6 +221,9 @@ class ClientHomeBloc implements Bloc {
     var snapshot = await _client.fetchFoodItems();
     List docList = snapshot.documents;
 
+
+
+    List<FoodItemWithDocID> tempAllFoodsList =new List<FoodItemWithDocID>();
     docList.forEach((doc) {
 
       final String foodItemName = doc['name'];
@@ -363,6 +258,7 @@ class ClientHomeBloc implements Bloc {
 //      print('foodItemDocumentID $foodItemDocumentID');
 
       final double foodItemDiscount = doc['discount'];
+      final int foodItemSL = doc['sl'];
 
 //      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
 
@@ -376,56 +272,94 @@ class ClientHomeBloc implements Bloc {
         isAvailable: foodIsAvailable,
         documentId: foodItemDocumentID,
         discount: foodItemDiscount,
+        sl:foodItemSL,
       );
 
-      _allFoodsList.add(oneFoodItemWithDocID);
+      tempAllFoodsList.add(oneFoodItemWithDocID);
     }
     );
+
+    _allFoodsList =tempAllFoodsList;
 
     _foodItemController.sink.add(_allFoodsList);
 
 
+
   }
 
-  //  Future<List<NewCategoryItem>> getAllCategories() async {
+  void getBestSellingFoodItems() async {
 
+    var snapshot = await _client.fetchBestSellingFoods();
 
-  // COPIED TO IDENTITY BLOC
-/*
-
-  Future getAllIngredients() async {
-
-
-    var snapshot = await _client.fetchAllIngredients();
     List docList = snapshot.documents;
 
 
 
-    List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
-        NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
+    List<FoodItemWithDocID> tempBestSellingFoodsList =new List<FoodItemWithDocID>();
+    docList.forEach((doc) {
 
-    ).toList();
-
-
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
-    ).toList();
-
-    print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
+      final String foodItemName = doc['name'];
+//      print('foodItemName $foodItemName');
 
 
-    _allIngItemsFGBloc = ingItems;
 
-    _allIngredientListController.sink.add(ingItems);
+      final String foodImageURL  = doc['image']==''?
+      'https://thumbs.dreamstime.com/z/smiling-orange-fruit-cartoon-mascot-character-holding-blank-sign-smiling-orange-fruit-cartoon-mascot-character-holding-blank-120325185.jpg'
+          :
+      storageBucketURLPredicate + Uri.encodeComponent(doc['image'])
+          +'?alt=media';
+//      print('doc[\'image\'] ${doc['image']}');
 
 
-//    return ingItems;
+
+      final bool foodIsAvailable =  doc['available'];
+
+
+      final Map<String,dynamic> oneFoodSizePriceMap = doc['size'];
+
+      final List<dynamic> foodItemIngredientsList =  doc['ingredient'];
+//          logger.i('foodItemIngredientsList at getAllFoodDataFromFireStore: $foodItemIngredientsList');
+
+
+//          print('foodSizePrice __________________________${oneFoodSizePriceMap['normal']}');
+
+      final String foodCategoryName = doc['category'];
+//      print('category: $foodCategoryName');
+
+      final String foodItemDocumentID = doc.documentID;
+//      print('foodItemDocumentID $foodItemDocumentID');
+
+      final double foodItemDiscount = doc['discount'];
+      final int foodItemSL = doc['sl'];
+
+//      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
+
+
+      FoodItemWithDocID oneFoodItemWithDocID = new FoodItemWithDocID(
+        itemName: foodItemName,
+        categoryName: foodCategoryName,
+        imageURL: foodImageURL,
+        sizedFoodPrices: oneFoodSizePriceMap,
+        ingredients: foodItemIngredientsList,
+        isAvailable: foodIsAvailable,
+        documentId: foodItemDocumentID,
+        discount: foodItemDiscount,
+        sl:foodItemSL,
+      );
+
+      tempBestSellingFoodsList.add(oneFoodItemWithDocID);
+    }
+    );
+
+    _bestSelling = tempBestSellingFoodsList.sublist(8,14);
+
+    logger.e('bestSelling: $_bestSelling');
+    print('bestSelling: $_bestSelling');
+//    _bestSelling= bestSelling;
+    _bestSellingFoodItemsController.sink.add(_bestSelling);
 
   }
 
-  */
 
 
   void getAllCategories() async {
@@ -489,13 +423,15 @@ class ClientHomeBloc implements Bloc {
   ClientHomeBloc() {
 
     // need to use this when moving to food Item Details page.
+
     getAllIngredients();
-
     getAllFoodItems();
-
     getAllCategories();
-
     getRestaurantInformation();
+
+    getBestSellingFoodItems();
+
+    initiateMenuOfferCartTypeSingleSelectOptions();
 
 //    getAllIngredients();
     // invoking this here to make the transition in details page faster.
@@ -508,7 +444,83 @@ class ClientHomeBloc implements Bloc {
   // CONSTRUCTOR ENDS HERE..
 
 
+  void initiateMenuOfferCartTypeSingleSelectOptions()
+  {
+//    MenuOfferCartTabTypeSingleSelect
+    MenuOfferCartTabTypeSingleSelect _menu = new MenuOfferCartTabTypeSingleSelect(
+      borderColor: '0xff739DFA',
+      index: 0,
+      isSelected: true,
+      tabTypeName: 'Menu',
+      iconDataString: 'FontAwesomeIcons.facebook',
+      tabIconName: 'flight_takeoff',
+    );
 
+    MenuOfferCartTabTypeSingleSelect _offer = new MenuOfferCartTabTypeSingleSelect(
+      borderColor: '0xff739DFA',
+      index: 1,
+      isSelected: false,
+      tabTypeName: 'Offer',
+      iconDataString: 'FontAwesomeIcons.facebook',
+      tabIconName: 'flight_takeoff',
+    );
+
+
+//     0xffFEE295 false
+    MenuOfferCartTabTypeSingleSelect _cart = new MenuOfferCartTabTypeSingleSelect(
+      borderColor: '0xff739DFA',
+      index: 2,
+      isSelected: false,
+      tabTypeName: 'Cart',
+      iconDataString: 'FontAwesomeIcons.facebook',
+      tabIconName: 'flight_takeoff',
+    );
+
+
+    List <MenuOfferCartTabTypeSingleSelect> menuOfferCartTabTypeSingleSelectArray = new List<MenuOfferCartTabTypeSingleSelect>();
+    menuOfferCartTabTypeSingleSelectArray.addAll([_menu,_offer,_cart]);
+    _allTabTypes = menuOfferCartTabTypeSingleSelectArray; // important otherwise => The getter 'sizedFoodPrices' was called on null.
+
+//    initiateAllMultiSelectOptions();
+
+    _clientHomeTabController.sink.add(_allTabTypes);
+
+  }
+
+  void setTabTypeSingleSelectOptionForHomePage(MenuOfferCartTabTypeSingleSelect x, int newIndex,int oldIndex){
+
+    print('newIndex is $newIndex');
+    print('oldIndex is $oldIndex');
+
+
+    List <MenuOfferCartTabTypeSingleSelect> tempSingleSelectTabArray = _allTabTypes;
+//    _currentOrderTypeIndex
+
+
+    tempSingleSelectTabArray[oldIndex].isSelected =
+    !tempSingleSelectTabArray[oldIndex].isSelected;
+
+    tempSingleSelectTabArray[newIndex].isSelected =
+    !tempSingleSelectTabArray[newIndex].isSelected;
+
+//    singleSelectArray[index].isSelected = true;
+
+//    x.isSelected= !x.isSelected;
+
+
+    // THIS IS NOT REQUIRED FOR THIS PAGE. Order currentOrderTemp AND currentOrderTemp.orderTypeIndex
+//    Order currentOrderTemp = _curretnOrder;
+//    currentOrderTemp.orderTypeIndex=newIndex;
+
+
+    _allTabTypes = tempSingleSelectTabArray; // important otherwise => The getter 'sizedFoodPrices' was called on null.
+
+//    _curretnOrder = currentOrderTemp;
+
+//    initiateAllMultiSelectOptions();
+    _clientHomeTabController.sink.add(_allTabTypes);
+//    _orderController.sink.add(_curretnOrder);
+  }
 
   // 4
   @override
@@ -517,6 +529,8 @@ class ClientHomeBloc implements Bloc {
     _categoriesController.close();
     _allIngredientListController.close();
     _restaurantController.close();
+    _bestSellingFoodItemsController.close();
+    _clientHomeTabController.close();
 //    _allIngredientListController.close();
   }
 }

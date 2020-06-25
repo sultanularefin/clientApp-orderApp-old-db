@@ -91,6 +91,34 @@ class FirebaseClient {
   }
 
 
+  Future<QuerySnapshot> fetchBestSellingFoods() async {
+
+    // print ('at here fetchFoodItems ==================================== *************** ');
+
+    /*
+    var snapshot= Firestore.instance
+        .collection("restaurants").document('USWc8IgrHKdjeDe9Ft4j').collection('foodItems').limit(65)
+        .getDocuments();
+    */
+
+
+//    await firestoreInstance
+//        .collection("countries")
+//        .where("countryName", whereIn: ["italy","lebanon"])
+//        .getDocuments();
+
+    var snapshot= Firestore.instance
+        .collection("restaurants").document('USWc8IgrHKdjeDe9Ft4j').collection('foodItems').limit(15)
+//        .where("name", whereIn: ["kana", "juusto"])
+        .getDocuments();
+
+    return snapshot;
+
+  }
+
+
+
+
   Future<DocumentSnapshot> fetchRestaurantDataClient() async{
 
     var snapshot = Firestore.instance
