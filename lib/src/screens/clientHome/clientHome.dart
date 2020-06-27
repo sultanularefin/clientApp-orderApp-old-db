@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:linkupclient/src/BLoC/clientShopping_bloc.dart';
+import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/CustomerInformation.dart';
 import 'package:linkupclient/src/DataLayer/models/Order.dart';
 import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
 import 'package:linkupclient/src/screens/clientShoppingCart/ClientShoppingCart.dart';
+import 'package:linkupclient/src/screens/searchFoods/FoodGallerySearch.dart';
 import 'package:logger/logger.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
 
@@ -121,9 +123,69 @@ class _MyStatelessWidgetState extends State<ClientHome> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.menu),
-            tooltip: 'Menu || Burger',
+            tooltip: 'Icons.menu',
             onPressed: () {
+
+
+              /*
+              Order orderFG = new Order(
+                selectedFoodInOrder: [],
+                selectedFoodListLength:0,
+                orderTypeIndex: 0, // phone, takeaway, delivery, dinning.
+                paymentTypeIndex: 2, //2; PAYMENT OPTIONS ARE LATER(0), CASH(1) CARD(2||Default)
+                ordersCustomer: null,
+                totalPrice: 0,
+                page:0,
+              );
+
+              List<SelectedFood> allSelectedFoodGallery = [];
+
+              CustomerInformation oneCustomerInfo = new CustomerInformation(
+                address: '',
+                flatOrHouseNumber: '',
+                phoneNumber: '',
+                etaTimeInMinutes: -1,
+              );
+              */
+
+//              orderFG.selectedFoodInOrder = allSelectedFoodGallery;
+//              orderFG.selectedFoodListLength = allSelectedFoodGallery.length;
+//              orderFG.totalPrice= 10.0;
+//              orderFG.ordersCustomer = oneCustomerInfo;
+//              print('add_shopping_cart button pressed');
+
+              /*
+               Navigator.of(context).push(
+
+                PageRouteBuilder(
+                  opaque: false,
+                  transitionDuration: Duration(
+                      milliseconds: 900),
+                  pageBuilder: (_, __, ___) =>
+                      BlocProvider<FoodGalleryBloc>(
+                          bloc: FoodGalleryBloc(),
+                          child: FoodGallerySearch()
+
+                      )
+
+                      ),
+
+
+              );
+               */
+
+              //print('isCancelButtonPressed: $isCancelButtonPressed');
+
+
+//    return BlocProvider<ClientShoppingBloc>(
+//        bloc: ClientShoppingBloc(orderFG),
+//        child: ClientShoppingCart()
+//
+//    );
               scaffoldKeyClientHome.currentState.showSnackBar(snackBar);
+
+
+
             },
             color: Color(0xff727C8E),
           ),
@@ -231,6 +293,65 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                                   ),
 
+                                  IconButton(
+                                    icon: const Icon(
+//                                          Icons.add_shopping_cart,
+                                      Icons.search,
+//                                            size: 28,
+
+                                      color: Color(0xffBCBCBD),
+                                    ),
+                                    iconSize:displayWidth(context)/14,
+                                    tooltip: 'Search Page Redirect Button',
+                                    onPressed: () {
+
+                                      Navigator.of(context).push(
+
+                                        PageRouteBuilder(
+                                            opaque: false,
+                                            transitionDuration: Duration(
+                                                milliseconds: 900),
+                                            pageBuilder: (_, __, ___) =>
+                                                BlocProvider<FoodGalleryBloc>(
+                                                    bloc: FoodGalleryBloc(),
+                                                    child: FoodGallerySearch()
+
+                                                )
+
+                                        ),
+
+
+                                      );
+
+//                                      scaffoldKeyClientHome.currentState.showSnackBar(snackBar);
+                                    },
+                                    color: Color(0xff727C8E),
+                                  ),
+
+                                  /*
+                                  Container(
+
+                                    height:displayWidth(context)/34,
+//                                          height: 25,
+                                    width: 5,
+                                    margin: EdgeInsets.only(left: 0,right:15,bottom: 5),
+//                    decoration: BoxDecoration(
+//                      shape: BoxShape.circle,
+//                      color: Colors.white,
+//                    ),
+                                    // work 1
+                                    child: Icon(
+//                                          Icons.add_shopping_cart,
+                                      Icons.search,
+//                                            size: 28,
+                                      size: displayWidth(context)/24,
+                                      color: Color(0xffBCBCBD),
+                                    ),
+
+
+                                  ),
+                                  */
+
                                 ],
                               ),
 
@@ -241,177 +362,15 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-                            Container(
-                              height: displayHeight(context) / 14,
-                              color: Color(0xffFFFFFF),
-//                      color: Color.fromARGB(255, 255,255,255),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceAround,
-                                children: <Widget>[
 
-
-                                  // CONTAINER FOR TOTAL PRICE CART BELOW.
-
-
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 0,
-                                        vertical: 0),
-                                    decoration: BoxDecoration(
-//                                      shape: BoxShape.circle,
-                                      borderRadius: BorderRadius.circular(25),
-                                      border: Border.all(
-
-                                        color: Color(0xffBCBCBD),
-                                        style: BorderStyle.solid,
-                                        width: 3,
-
-
-                                      ),
-
-                                      boxShadow: [
-                                        BoxShadow(
-//                                            color: Color.fromRGBO(250, 200, 200, 1.0),
-                                            color: Color(0xffFFFFFF),
-                                            blurRadius: 10.0,
-                                            // USER INPUT
-                                            offset: Offset(0.0, 2.0))
-                                      ],
-
-
-                                      color: Color(0xffFFFFFF),
-//                                      Colors.black54
-                                    ),
-                                    // USER INPUT
-
-
-//                                  color: Color(0xffFFFFFF),
-                                    width: displayWidth(context) / 3,
-                                    height: displayHeight(context) / 27,
-                                    padding: EdgeInsets.only(
-                                        left: 4, top: 3, bottom: 3, right: 3),
-                                    child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .center,
-                                      children: <Widget>[
-                                        Container(
-
-                                          height:displayWidth(context)/34,
-//                                          height: 25,
-                                          width: 5,
-                                          margin: EdgeInsets.only(left: 0,right:15,bottom: 5),
-//                    decoration: BoxDecoration(
-//                      shape: BoxShape.circle,
-//                      color: Colors.white,
-//                    ),
-                                          // work 1
-                                          child: Icon(
-//                                          Icons.add_shopping_cart,
-                                            Icons.search,
-//                                            size: 28,
-                                            size: displayWidth(context)/24,
-                                            color: Color(0xffBCBCBD),
-                                          ),
-
-
-                                        ),
-
-                                        Container(
-//                                        margin:  EdgeInsets.only(
-//                                          right:displayWidth(context) /32 ,
-//                                        ),
-                                          alignment: Alignment.center,
-                                          width: displayWidth(context) / 4.7,
-//                                        color:Colors.purpleAccent,
-                                          // do it in both Container
-                                          child: TextField(
-                                            decoration: InputDecoration(
-//                                            prefixIcon: new Icon(Icons.search),
-//                                        borderRadius: BorderRadius.all(Radius.circular(5)),
-//                                        border: Border.all(color: Colors.white, width: 2),
-                                              border: InputBorder.none,
-//                                              hintText: 'Search about meal',
-//                                              hintStyle: TextStyle(fontWeight: FontWeight.bold),
-
-
-//                                        labelText: 'Search about meal.'
-                                            ),
-                                            onChanged: (text) {
-//                                              logger.i('on onChanged of condition 4');
-
-
-                                              print(
-                                                  "First text field from Condition 04: $text");
-                                            },
-                                            onTap: () {
-                                              print('condition 4');
-//                                              logger.i('on Tap of condition 4');
-
-                                            },
-
-                                            onEditingComplete: () {
-//                                              logger.i('onEditingComplete  of condition 4');
-                                              print(
-                                                  'called onEditing complete');
-
-                                            },
-
-                                            onSubmitted: (String value) async {
-                                              await showDialog<void>(
-                                                context: context,
-                                                builder: (
-                                                    BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Text(
-                                                        'Thanks!'),
-                                                    content: Text(
-                                                        'You typed "$value".'),
-                                                    actions: <Widget>[
-                                                      FlatButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: const Text('OK'),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
-
-                                        )
-
-//                                  Spacer(),
-
-//                                  Spacer(),
-
-                                      ],
-                                    ),
-                                  ),
-
-                                  Container(
-
-                                    child: futureWidget(), // CLASS TO WIDGET SINCE I NEED TO INVOKE THE
-
-                                  ),
-
-                                ],
-                              ),
-                            ),
 
 
 
 
                             // CONTAINER FOR TOTAL PRICE CART ABOVE.
                             Container(
-                              height: displayHeight(context) / 9 + displayHeight(context) / 22,
+                              height: displayHeight(context) / 9 + displayHeight(context) / 10,
+                              // HEIGHT OF COLUMN CHILDREN 1   + CHILDREN 2,
                               padding: EdgeInsets.fromLTRB(
                                   0, 0, 0, 0),
                               // FOR CATEGORY SERARCH.
@@ -423,8 +382,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        height: displayHeight(context) / 30,
-                                        padding:EdgeInsets.fromLTRB(4,0,0,0),
+                                        height: displayHeight(context) / 10,
+                                        padding:EdgeInsets.fromLTRB(10,displayHeight(context) / 23,0,2),
                                         child: Text('best selling',style: TextStyle(
                                           fontFamily: 'Itim-Regular',
                                         ),),
@@ -458,6 +417,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                             ),
 
 
+                            // TAB BUTTONS , MENU, OFFERS AND CART PAGE BEGINS HERE.
                             Container(
                               height: displayHeight(context) /11,
 //                          color: Colors.blueGrey,
@@ -509,6 +469,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                               ),
                             ),
 
+
+
+                            // TAB BUTTONS , MENU, OFFERS AND CART PAGE ENDS HERE.
 
 
 
@@ -657,11 +620,134 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
   Widget menuAnimatedWidget(Restaurant oneRestaurant){
 
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+
+    return StreamBuilder<List<FoodItemWithDocID>>(
+        stream: blocH.foodItemsStream,
+        initialData: blocH.allFoodItems,
+
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+
+            print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+            return
+              Container(
+                height: displayHeight(context) / 9,
+                child: Text("No FoodItems found, check api, internet etc.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
+
+
+                ),
+              );
+          }
+
+          else {
+
+
+
+
+            final List<FoodItemWithDocID> allFoods = snapshot.data;
+            if((allFoods==null) ||(allFoods.length ==0)){
+
+              return Container(
+                  height: displayHeight(context) / 9,
+//          height:190,
+
+//              color: Colors.yellowAccent,
+//                    color: Color(0xff54463E),
+                  color: Color(0xFFffffff),
+                  alignment: Alignment.center,
+
+                  // PPPPP
+
+                  child:(
+                      Text("No best selling foods found",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )
+                  )
+              );
+            }
+
+            else{
+
+
+
+//               filteredItemsByCategory;
+              List<FoodItemWithDocID> filteredItemsByCategory = allFoods.where((oneItem) =>
+              oneItem.categoryName.
+              toLowerCase() ==
+                  _currentCategory.toLowerCase()).toList();
+
+
+              // to do test.
+              // if(searchString2!=null)
+
+              /*
+              final List filteredItems = filteredItemsByCategory.where((
+                  oneItem) =>
+                  oneItem.itemName.toLowerCase().
+                  contains(
+                      searchString2.toLowerCase())).toList();
+
+              */
+
+              final int categoryItemsCount = filteredItemsByCategory.length;
+              print('categoryItemsCount: $categoryItemsCount');
+
+              return Container(
+                height: displayHeight(context) / 3,
+                color: Color(0xFFffffff),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+
+//                                          itemCount: sizeConstantsList.length,
+                  itemCount: filteredItemsByCategory.length,
+
+                  itemBuilder: (_, int index) {
+
+//                  print(
+//                      'valuePrice at line # 583: $valuePrice and key is $key');
+                    return oneMenuItemFromFoodItem(filteredItemsByCategory[index],index
+                    );
+                  },
+
+//      controller: new ScrollController(
+//          keepScrollOffset: false),
+                  shrinkWrap: false,
+                ),
+
+              );
+            }
+          }
+        }
+    );
+
+
 
 //
 //    bolognese pizza
 
+
+
+
+  /*
+    */
+  }
+
+
+  Widget oneMenuItemFromFoodItem(FoodItemWithDocID oneSelectedFood,int index){
+
     Map<String, dynamic> listpart1 = new Map<String, dynamic>();
+
 
     List<String> actionkeys =['share', 'love', 'favorite'];
     List<String> iconNames =['share', 'love', 'favorite'];
@@ -686,6 +772,24 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                   ),),
                 ],
               ),
+            ),
+
+
+            Container(
+              height: displayHeight(context)/22,
+
+              child:Text('This is so delicious pizza which we'
+                  'offer for our customers from our unique menu',
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Itim-Regular',
+                  color: Color(0xff3F5362),
+                ),
+
+              ),
+
+
             ),
 
             Container(
@@ -784,23 +888,10 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-            Container(
-              height: displayHeight(context)/22,
-              child: Row(
-                children: <Widget>[
-                  Text('This is so delicious pizza which we'
-                      'offer for our customers from our unique menu',
-                    style: TextStyle(
-                      fontFamily: 'Itim-Regular',
-                      color: Color(0xff3F5362),
-                    ),
-
-                  ),
-                ],
-              ),
-            ),
 
 
+
+            /*
             Container(
               child: Row(
                 children: <Widget>[
@@ -808,14 +899,13 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                 ],
               ),
             ),
+            */
 
 
 
           ],
         )
     );
-
-
   }
 
 

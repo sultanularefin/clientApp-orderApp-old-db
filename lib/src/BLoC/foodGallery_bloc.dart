@@ -13,7 +13,7 @@ import 'package:linkupclient/src/DataLayer/models/FoodItemWithDocID.dart';
 import 'package:linkupclient/src/DataLayer/models/newCategory.dart';
 //import 'package:zomatoblock/DataLayer/location.dart';
 
-
+import 'package:logger/logger.dart';
 
 
 import 'package:linkupclient/src/DataLayer/api/firebase_client.dart';
@@ -27,6 +27,11 @@ import 'dart:async';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 //class LocationBloc implements Bloc {
 class FoodGalleryBloc implements Bloc {
+
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   // id ,type ,title <= Location.
 
   List<FoodItemWithDocID> _allFoodsList=[];
@@ -34,7 +39,7 @@ class FoodGalleryBloc implements Bloc {
   List<NewCategoryItem> _allCategoryList=[];
 
   List<NewIngredient> _allIngItemsFGBloc =[];
-  
+
   List<NewIngredient> get getAllIngredientsPublicFGB2 => _allIngItemsFGBloc;
   Stream<List<NewIngredient>> get ingredientItemsStream => _allIngredientListController.stream;
   final _allIngredientListController = StreamController <List<NewIngredient>> /*.broadcast*/();
@@ -116,7 +121,7 @@ class FoodGalleryBloc implements Bloc {
     documentSnapshot.documentID
     ).toList();
 
-   // print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
+    // print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
 
 
     _allIngItemsFGBloc = ingItems;
@@ -135,10 +140,18 @@ class FoodGalleryBloc implements Bloc {
     var snapshot = await _client.fetchFoodItems();
     List docList = snapshot.documents;
 
+    List<FoodItemWithDocID> tempAllFoodsList= new List<FoodItemWithDocID>();
     docList.forEach((doc) {
 
       final String foodItemName = doc['name'];
 //      print('foodItemName $foodItemName');
+
+      final String foodItemDocumentID = doc.documentID;
+//      print('foodItemDocumentID $foodItemDocumentID');
+
+      if(foodItemName =='Junior Juustohampurilainen'){
+        logger.e('Junior Juustohampurilainen found check $foodItemDocumentID');
+      }
 
 
 
@@ -165,8 +178,7 @@ class FoodGalleryBloc implements Bloc {
       final String foodCategoryName = doc['category'];
 //      print('category: $foodCategoryName');
 
-      final String foodItemDocumentID = doc.documentID;
-//      print('foodItemDocumentID $foodItemDocumentID');
+
 
       final double foodItemDiscount = doc['discount'];
 
@@ -184,9 +196,11 @@ class FoodGalleryBloc implements Bloc {
         discount: foodItemDiscount,
       );
 
-      _allFoodsList.add(oneFoodItemWithDocID);
+      tempAllFoodsList.add(oneFoodItemWithDocID);
     }
     );
+
+    _allFoodsList= tempAllFoodsList;
 
     _foodItemController.sink.add(_allFoodsList);
 
@@ -197,41 +211,7 @@ class FoodGalleryBloc implements Bloc {
 
 
   // COPIED TO IDENTITY BLOC
-/*
 
-  Future getAllIngredients() async {
-
-
-    var snapshot = await _client.fetchAllIngredients();
-    List docList = snapshot.documents;
-
-
-
-    List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
-        NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
-
-    ).toList();
-
-
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
-    ).toList();
-
-    print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
-
-
-    _allIngItemsFGBloc = ingItems;
-
-    _allIngredientListController.sink.add(ingItems);
-
-
-//    return ingItems;
-
-  }
-
-  */
 
 
   void getAllCategories() async {
@@ -240,6 +220,8 @@ class FoodGalleryBloc implements Bloc {
     var snapshot = await _client.fetchCategoryItems();
     List docList = snapshot.documents;
 
+
+    List<NewCategoryItem> tempAllCategories = new List<NewCategoryItem>();
 
     docList.forEach((doc) {
 
@@ -267,19 +249,19 @@ class FoodGalleryBloc implements Bloc {
 
       );
 
-      _allCategoryList.add(oneCategoryItem);
+      tempAllCategories.add(oneCategoryItem);
     }
     );
 
-    NewCategoryItem all = new NewCategoryItem(
-      categoryName: 'All',
-      imageURL: 'None',
-      rating: 0,
-      totalRating: 5,
+//    NewCategoryItem all = new NewCategoryItem(
+//      categoryName: 'All',
+//      imageURL: 'None',
+//      rating: 0,
+//      totalRating: 5,
+//
+//    );
 
-    );
-
-    _allCategoryList.add(all);
+    _allCategoryList= tempAllCategories;
 
     _categoriesController.sink.add(_allCategoryList);
     //    _foodItemController.sink.add(_allCategoryList);
