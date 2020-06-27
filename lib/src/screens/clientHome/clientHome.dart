@@ -222,7 +222,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 //                #### 1ST CONTAINER SEARCH STRING AND TOTAL ADD TO CART PRICE.
 
-                  Expanded(
+                  //Expanded
+                  Container(
+                      width: displayWidth(context)/1.25,
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -517,6 +519,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                   //EXPANDED WIDGET ENDS HERE
 
                   Container(
+//                    color:Colors.redAccent,
+                    width: displayWidth(context)/5,
                     alignment: Alignment.topCenter,
                     height: displayHeight(context) -
                         MediaQuery
@@ -739,10 +743,11 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-  /*
+    /*
     */
   }
 
+  num tryCast<num>(dynamic x, {num fallback }) => x is num ? x : 0.0;
 
   Widget oneMenuItemFromFoodItem(FoodItemWithDocID oneSelectedFood,int index){
 
@@ -751,6 +756,27 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
     List<String> actionkeys =['share', 'love', 'favorite'];
     List<String> iconNames =['share', 'love', 'favorite'];
+
+    final String foodItemName = oneSelectedFood.itemName;
+    final String foodImageURL = oneSelectedFood.imageURL;
+
+    final Map<String,
+        dynamic> foodSizePrice =  oneSelectedFood.sizedFoodPrices;
+
+    final dynamic euroPriceUnSanitized = foodSizePrice['normal'];
+
+//                num euroPrice2 = tryCast(euroPrice);
+    double euroPriceDoubled = tryCast<double>(
+        euroPriceUnSanitized, fallback: 0.00);
+//                String euroPrice3= num.toString();
+//                print('euroPrice2 :$euroPrice2');
+
+    String euroPriceFixedTwo = euroPriceDoubled.toStringAsFixed(2);
+
+
+
+//    final String fooditemNormalPrice = oneSelectedFood.sizedFoodPrices;
+
 
 
     return Container(
@@ -762,11 +788,11 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text('bolognese pizza',style: TextStyle(
+                  Text(foodItemName,style: TextStyle(
                     fontFamily: 'Itim-Regular',
                     color: Color(0xff3F5362),
                   ),),
-                  Text('7.500' + '\u20AC',style: TextStyle(
+                  Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
                     fontFamily: 'Itim-Regular',
                     color: Color(0xff3F5362),
                   ),),
@@ -802,7 +828,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
 //                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
-                    width: 80,
+                    width: displayWidth(context)/6,
                     child:
                     Column(
 //                      shrinkWrap: false,
@@ -862,7 +888,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                   ),
                   Container(
-                    color: Colors.deepOrange,
+//                    color: Colors.deepOrange,
 //                                  color:Color(0xffDAD7C3),
 
 //                      margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
@@ -873,9 +899,38 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                     Container(
                       height: 150,
-                      width: 220,//300-80,
-                      color: Colors.amber[500],
-                      child: const Center(child: Text('Entry B')),
+                      width: displayWidth(context)/1.25 -displayWidth(context)/6,
+                      // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
+
+//                      width: 220,//300-80,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.rectangle,
+//          borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+
+                          color: Color(0xff000000),
+                          style: BorderStyle.solid,
+                          width: 2,
+
+
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+
+                      ),
+
+
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(26.0)),
+
+                        child: CachedNetworkImage(
+//                  imageUrl: dummy.url,
+                          imageUrl: foodImageURL,
+                          fit: BoxFit.cover,
+                          placeholder: (context,
+                              url) => new CircularProgressIndicator(),
+                        ),
+                      ),
+//                        foodImageURL
                     ),
 
 
@@ -1652,7 +1707,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               style: BorderStyle.solid,
 //            width: 1,
             ),
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(3.0),
           ),
 
           child:Container(
@@ -1702,6 +1757,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //            width: 1,
             ),
             borderRadius: BorderRadius.circular(30.0),
+
           ),
 
           child:Container(
