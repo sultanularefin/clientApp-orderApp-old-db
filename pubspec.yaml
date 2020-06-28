@@ -66,6 +66,7 @@ dependencies:
   flutter_icons: ^1.1.0
   percent_indicator: ^2.1.5
   intl: ^0.16.1
+  jiffy: ^3.0.1
 #  flutter_svg: ^0.18.0
 
 

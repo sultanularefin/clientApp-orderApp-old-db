@@ -559,14 +559,15 @@ class ClientHomeBloc implements Bloc {
 
     getAllIngredients();
 
-    getAllFoodItems();
+
     getAllCategories();
     getRestaurantInformation();
-
-    getBestSellingFoodItems();
-
     initiateMenuOfferCartTypeSingleSelectOptions();
     initiateLocalOffers();
+    getAllFoodItems();
+    getBestSellingFoodItems();
+
+
 
 //    getAllIngredients();
     // invoking this here to make the transition in details page faster.

@@ -6,6 +6,7 @@ import 'package:linkupclient/src/DataLayer/models/Offer.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:jiffy/jiffy.dart';
 //import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
@@ -1288,7 +1289,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-  Widget offersAnimatedWidget(Restaurant oneRestaurant){
+  offersAnimatedWidget(Restaurant oneRestaurant){
 
 
 
@@ -1369,8 +1370,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 //                  print(
 //                      'valuePrice at line # 583: $valuePrice and key is $key');
-                    return oneOfferItemFromOffersAnimatedWidget(allOffers[index],index
-                    );
+                    return oneOfferItemFromOffersAnimatedWidget(allOffers[index],index);
 //                    oneOfferItemFromOffersAnimatedWidget
                   },
 
@@ -1392,6 +1392,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
   Widget oneOfferItemFromOffersAnimatedWidget(Offer oneOffer,int index){
+      Jiffy.locale("sv");
     var logger = Logger();
     Map<String, dynamic> listpart1 = new Map<String, dynamic>();
 
@@ -1406,6 +1407,11 @@ class _MyStatelessWidgetState extends State<ClientHome> {
     DateTime oneOfferSetTime = oneOffer.offerSetTime;
 
     logger.e('check');
+
+
+    print(' :${Jiffy(oneOfferExpiresBefore).format("MMMM do yyyy, h:mm:ss a")}');
+
+
 
 //    Intl.defaultLocale = 'bn';
 //    final df = oneOfferExpiresBefore ;
