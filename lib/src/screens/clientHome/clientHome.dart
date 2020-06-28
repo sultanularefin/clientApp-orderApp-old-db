@@ -2,9 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:linkupclient/src/DataLayer/models/Offer.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
+//import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
 
 // MODELS ==>
@@ -1288,9 +1291,527 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   Widget offersAnimatedWidget(Restaurant oneRestaurant){
 
 
-    return Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}');
+
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+
+    return StreamBuilder<List<Offer>>(
+        stream: blocH.getOffersStream,
+        initialData: blocH.getAllOffers,
+
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+
+            print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+            return
+              Container(
+                height: displayHeight(context) / 9,
+                child: Text("No Offers found, check api, internet etc.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
 
 
+                ),
+              );
+          }
+
+          else {
+
+
+
+
+            final List<Offer> allOffers = snapshot.data;
+            if((allOffers==null) ||(allOffers.length ==0)){
+
+              return Container(
+                  height: displayHeight(context) / 9,
+//          height:190,
+
+//              color: Colors.yellowAccent,
+//                    color: Color(0xff54463E),
+                  color: Color(0xFFffffff),
+                  alignment: Alignment.center,
+
+                  // PPPPP
+
+                  child:(
+                      Text("0 Offers found, please check again.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )
+                  )
+              );
+            }
+
+            else{
+
+
+
+              final int allOffersCount = allOffers.length;
+              print('allOffersCount: $allOffersCount');
+
+              return Container(
+                height: displayHeight(context) - displayHeight(context) / 3,
+                color: Color(0xFFffffff),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+
+//                                          itemCount: sizeConstantsList.length,
+                  itemCount: allOffersCount,
+
+                  itemBuilder: (_, int index) {
+
+//                  print(
+//                      'valuePrice at line # 583: $valuePrice and key is $key');
+                    return oneOfferItemFromOffersAnimatedWidget(allOffers[index],index
+                    );
+//                    oneOfferItemFromOffersAnimatedWidget
+                  },
+
+//      controller: new ScrollController(
+//          keepScrollOffset: false),
+                  shrinkWrap: false,
+                ),
+
+              );
+            }
+          }
+        }
+    );
+
+
+
+
+  }
+
+
+  Widget oneOfferItemFromOffersAnimatedWidget(Offer oneOffer,int index){
+    var logger = Logger();
+    Map<String, dynamic> listpart1 = new Map<String, dynamic>();
+
+
+    List<String> actionkeys =['share', 'love', 'favorite'];
+    List<String> iconNames =['share', 'love', 'favorite'];
+
+    final String oneOfferTitle = oneOffer.offerTitle;
+    final String oneOfferfoodImageURL =  oneOffer.imageURL;
+
+    DateTime oneOfferExpiresBefore = oneOffer.offerExpiredTime;
+    DateTime oneOfferSetTime = oneOffer.offerSetTime;
+
+    logger.e('check');
+
+//    Intl.defaultLocale = 'bn';
+//    final df = oneOfferExpiresBefore ;
+//    final df = new DateFormat('dd-MM-yyyy hh:mm a');
+//    int myvalue = 1558432747;
+//    print(df.format(new DateTime.fromMillisecondsSinceEpoch(myvalue*1000)));
+//    print("${DateFormat.jm().format(DateTime.now())}");
+//    print(myMessage(dateString, locale: 'ar');
+
+//    print(${oneOfferExpiresBefore.)
+
+
+    /*
+    final Map<String,
+        dynamic> foodSizePrice =  oneSelectedFood.sizedFoodPrices;
+
+    final dynamic euroPriceUnSanitized = foodSizePrice['normal'];
+
+//                num euroPrice2 = tryCast(euroPrice);
+    double euroPriceDoubled = tryCast<double>(
+        euroPriceUnSanitized, fallback: 0.00);
+    */
+//                String euroPrice3= num.toString();
+//                print('euroPrice2 :$euroPrice2');
+
+    String euroPriceFixedTwo = oneOffer.offerPrice.toStringAsFixed(2);
+
+    /*
+    List<NewIngredient> sanitizedIngredients = oneSelectedFood.ingredients;
+    */
+
+
+
+//    final String fooditemNormalPrice = oneSelectedFood.sizedFoodPrices;
+
+
+
+    return  Container(
+      margin: EdgeInsets.symmetric(vertical:10,horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical:5,horizontal: 10),
+
+      decoration:
+      new BoxDecoration(
+        borderRadius: new BorderRadius
+            .circular(
+            10.0),
+//                                    color: Colors.purple,
+        color: Colors.white,
+      ),
+
+
+      child:
+      Neumorphic(
+        // State of Neumorphic (may be convex, flat & emboss)
+
+        /*
+                                      boxShape: NeumorphicBoxShape
+                                          .roundRect(
+                                        BorderRadius.all(
+                                            Radius.circular(15)),
+
+                                      ),
+                                      */
+          curve: Neumorphic.DEFAULT_CURVE,
+          style: NeumorphicStyle(
+            shape: NeumorphicShape
+                .concave,
+            depth: 8,
+            lightSource: LightSource
+                .topLeft,
+            color: Colors.white,
+            boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
+            ),
+          ),
+
+//                    MAX_DEPTH,DEFAULT_CURVE
+
+//
+//                      BorderRadius.circular(25),
+//                  border: Border.all(
+
+
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(oneOfferTitle,style: TextStyle(
+                      fontFamily: 'Itim-Regular',
+                      color: Color(0xff3F5362),
+                    ),),
+                    Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
+                      fontFamily: 'Itim-Regular',
+                      color: Color(0xff3F5362),
+                    ),),
+                  ],
+                ),
+              ),
+
+
+              Container(
+                height: displayHeight(context)/22,
+                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 5),
+
+                child:Text('This is so delicious pizza which we'
+                    'offer for our customers from our unique menu',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Itim-Regular',
+                    color: Color(0xff3F5362),
+                  ),
+
+                ),
+
+
+              ),
+
+              Container(
+                padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+//                    color: Colors.blueGrey,
+//                                  color:Color(0xffDAD7C3),
+
+//                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+                      width: displayWidth(context)/6,
+                      child:
+                      Column(
+//                      shrinkWrap: false,
+//                      padding: const EdgeInsets.all(8),
+                        children: <Widget>[
+                          Container(
+//                          height: 50,
+//                          color: Colors.amber[600],
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                              highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                              padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              child: Column(
+                                children: <Widget>[
+
+                                  Icon(
+                                    getIconForName(iconNames[0]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
+
+                                  ),
+                                  Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
+//
+                                print('onPressed pressed ${actionkeys[0]}');
+
+
+                              },
+                            ),
+                          ),
+                          Container(
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                              highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                              padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              child: Column(
+                                children: <Widget>[
+
+                                  Icon(
+                                    getIconForName(iconNames[1]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
+
+                                  ),
+                                  Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
+//
+                                print('onPressed pressed ${actionkeys[1]}');
+
+
+                              },
+                            ),
+
+                          ),
+
+                          Container(
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                              highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                              padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              child: Column(
+                                children: <Widget>[
+
+                                  Icon(
+                                    getIconForName(iconNames[2]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
+
+                                  ),
+                                  Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
+//
+                                print('onPressed pressed ${actionkeys[2]}');
+
+
+                              },
+                            ),
+
+                          ),
+
+                        ],
+                      ),
+
+
+                    ),
+                    Container(
+//                    color: Colors.deepOrange,
+//                                  color:Color(0xffDAD7C3),
+
+//                      margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+//                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+//                      width: displayWidth(context) * 0.57,
+                      padding: EdgeInsets.symmetric(vertical:0,horizontal:5),
+                      child:
+
+                      Container(
+
+                        height: (displayHeight(context)/14) *3,
+//                        height: 150,
+                        width: displayWidth(context)/1.25 -displayWidth(context)/6- 20 /*(padding on both sides 10*2 )*/  -10 /* padding on within
+                        the parent container. */,
+                        // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
+
+//                      width: 220,//300-80,
+
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.rectangle,
+//          borderRadius: BorderRadius.circular(25),
+                          border: Border.all(
+
+                            color: Color(0xff000000),
+                            style: BorderStyle.solid,
+                            width: 2,
+
+
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+
+                        ),
+
+
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(26.0)),
+
+                          child: Container(),
+                          /* CachedNetworkImage(
+//                  imageUrl: dummy.url,
+                            imageUrl: oneOfferfoodImageURL,
+                            fit: BoxFit.cover,
+                            placeholder: (context,
+                                url) => new CircularProgressIndicator(),
+                          ),
+                          */
+
+
+                        ),
+//                        foodImageURL
+                      ),
+
+
+                    )
+
+                  ],
+                ),
+              ),
+
+              Container(
+                  height: displayHeight(context)/10,
+                child: Row(
+                  children: <Widget>[
+
+
+
+                    // CIRCULAR PROGRESS INDICATOR........
+                    Container(
+
+                      width: displayWidth(context)/6 +20,
+                      padding:EdgeInsets.symmetric(
+                          vertical: 0,horizontal: 9),
+
+                      /*
+                      child:new CircularProgressIndicator(
+                        value:0.9,
+
+                        valueColor:
+                        AlwaysStoppedAnimation<Color>
+                          (Colors.redAccent),
+
+                        strokeWidth: 4,
+                        semanticsLabel: 'sss',
+                        semanticsValue: 'ss',
+                        backgroundColor: Colors.grey,
+
+                      ),
+
+                      */
+
+                      child: new CircularPercentIndicator(
+                        radius: 60.0,
+                        lineWidth: 5.0,
+                        percent: 1.0,
+                        center: new Text(oneOfferExpiresBefore.difference(DateTime.now()).inHours.toString()),
+                        progressColor: Colors.green,
+                      )
+
+//                  date2.difference(birthday).inDays;
+
+                    ),
+
+
+                    Container(
+                      width: displayWidth(context)/1.25 -displayWidth(context)/6-
+                          20 /*(padding on both sides 10*2 )*/  -10 /* padding on within
+                     the parent container.  */-20 /*20 added for circular percentage */,
+                      height: displayHeight(context)/22,
+                      padding:EdgeInsets.symmetric(vertical: 0,horizontal: 5),
+
+                      child:Text('This is so delicious pizza which we'
+                          'offer for our customers from our unique menu',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'Itim-Regular',
+                          color: Color(0xff3F5362),
+                        ),
+
+                      ),
+
+
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+
+
+
+              /*
+              Container(
+                  height: displayHeight(context) / 10,
+                  width: displayWidth(context)/1.25,
+//                width: displayWidth(context) /1.5,
+//                  color: Color(0xfff4444aa),
+//                                                        alignment: Alignment.center,
+                  child: buildDefaultIngredients(
+                      context,sanitizedIngredients
+                  )
+                //Text('buildDefaultIngredients('
+                //    'context'
+                //')'),
+              ),
+              */
+              /*
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
+                  ],
+                ),
+              ),
+              */
+
+
+
+            ],
+          )
+      ),
+    );
   }
 
 

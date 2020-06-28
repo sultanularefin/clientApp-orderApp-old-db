@@ -4,6 +4,7 @@
 import 'package:linkupclient/src/BLoC/bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
 import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
+import 'package:linkupclient/src/DataLayer/models/Offer.dart';
 import 'package:logger/logger.dart';
 
 //MODELS
@@ -99,10 +100,17 @@ class ClientHomeBloc implements Bloc {
 
   List<MenuOfferCartTabTypeSingleSelect>   _allTabTypes;
   List<MenuOfferCartTabTypeSingleSelect> get getCurrentTabType => _allTabTypes;
-
   final _clientHomeTabController = StreamController <List<MenuOfferCartTabTypeSingleSelect>>.broadcast();
   Stream  <List<MenuOfferCartTabTypeSingleSelect>> get getCurrentTabTypeSingleSelectStream =>
       _clientHomeTabController.stream;
+
+
+  List<Offer>   _allOffers;
+  List<Offer> get getAllOffers => _allOffers;
+  final _clientHomeOffersController = StreamController <List<Offer>>.broadcast();
+  Stream  <List<Offer>> get getOffersStream =>
+      _clientHomeOffersController.stream;
+
 
 
 
@@ -558,6 +566,7 @@ class ClientHomeBloc implements Bloc {
     getBestSellingFoodItems();
 
     initiateMenuOfferCartTypeSingleSelectOptions();
+    initiateLocalOffers();
 
 //    getAllIngredients();
     // invoking this here to make the transition in details page faster.
@@ -570,6 +579,90 @@ class ClientHomeBloc implements Bloc {
   // CONSTRUCTOR ENDS HERE..
 
 
+  void initiateLocalOffers()
+  {
+
+    Offer firstOffer = new Offer(
+
+      offerExpiredTime: new DateTime.now().add(new Duration(hours: 20)),
+//    var sixtyDaysFromNow = now.add(new Duration(days: 60));
+      offerSetTime: new DateTime.now().add(new Duration(hours: -10)), // since this data is created locally and will change
+      // we are making it negative.
+      imageURL:'',
+      offerHeaderText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerFooterText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerTitle: 'first offer',
+      offerPrice:7.5,
+      sl:1,
+      offerItemName:'',
+    );
+
+    Offer secondoffer = new Offer(
+
+
+      offerExpiredTime: new DateTime.now().add(new Duration(hours: 20)),
+//    var sixtyDaysFromNow = now.add(new Duration(days: 60));
+      offerSetTime: new DateTime.now().add(new Duration(hours: -10)), // since this data is created locally and will change
+      // we are making it negative.
+      imageURL:'',
+      offerHeaderText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerFooterText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerTitle: 'second offer',
+      offerPrice:7.5,
+      sl:1,
+      offerItemName:'',
+    );
+
+
+//     0xffFEE295 false
+    Offer thirdoffer = new Offer(
+
+
+      offerExpiredTime: new DateTime.now().add(new Duration(hours: 20)),
+      offerSetTime: new DateTime.now().add(new Duration(hours: -10)), // since this data is created locally and will change
+      // we are making it negative.
+//    var sixtyDaysFromNow = now.add(new Duration(days: 60));
+      imageURL:'',
+      offerHeaderText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerFooterText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerTitle: 'third offer',
+      offerPrice:7.5,
+      sl:1,
+      offerItemName:'',
+
+    );
+
+
+    Offer fourthoffer = new Offer(
+
+      offerExpiredTime: new DateTime.now().add(new Duration(hours: 20)),
+//    var sixtyDaysFromNow = now.add(new Duration(days: 60));
+      offerSetTime: new DateTime.now().add(new Duration(hours: -10)), // since this data is created locally and will change
+      // we are making it negative.
+      imageURL:'',
+      offerHeaderText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerFooterText:'This is so delicious pizza which we offer for our customers from our unique menu',
+      offerTitle: 'fourth offer',
+      offerPrice:7.5,
+      sl:1,
+      offerItemName:'',
+    );
+
+
+
+    List <Offer> newTempOffers = new List<Offer>();
+
+
+    newTempOffers.addAll([firstOffer, secondoffer, thirdoffer, fourthoffer]);
+
+    _allOffers = newTempOffers; // important otherwise => The getter 'sizedFoodPrices' was called on null.
+
+
+//    initiateAllMultiSelectOptions();
+
+    _clientHomeOffersController.sink.add(_allOffers);
+
+  }
   void initiateMenuOfferCartTypeSingleSelectOptions()
   {
 //    MenuOfferCartTabTypeSingleSelect
@@ -657,6 +750,7 @@ class ClientHomeBloc implements Bloc {
     _restaurantController.close();
     _bestSellingFoodItemsController.close();
     _clientHomeTabController.close();
+    _clientHomeOffersController.close();
 //    _allIngredientListController.close();
   }
 }
