@@ -66,6 +66,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
+
+
     logger.d("Logger is working!");
     final blocH = BlocProvider.of<ClientHomeBloc>(context);
     return GestureDetector(
@@ -363,16 +365,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                             //1ST CONTAINER RESTAURANT INFORMATION ENDS HERE.
 
 
-
-
-
-
-
-
-                            // CONTAINER FOR TOTAL PRICE CART ABOVE.
                             Container(
                               height: displayHeight(context) / 9 + displayHeight(context) / 10,
-                              // HEIGHT OF COLUMN CHILDREN 1   + CHILDREN 2,
+                              // HEIGHT OF COLUMN CHILDREN 1 (best selling text)   + CHILDREN 2 (best selling foods),
                               padding: EdgeInsets.fromLTRB(
                                   0, 0, 0, 0),
                               // FOR CATEGORY SERARCH.
@@ -479,7 +474,19 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
                             Container(
                               color: Colors.yellowAccent,
-                              height:300,
+                              height: displayHeight(context)-
+                                  MediaQuery.of(context).padding.top /* TOP SAFE AREA*/
+                                  - MediaQuery.of(context).padding.bottom /* BOTTOM SAFEAREA*/-
+
+                                  (displayHeight(context) / 14)-(kToolbarHeight+6)
+
+                                  -displayHeight(context) / 9 - displayHeight(context) / 10-
+
+// HEIGHT OF COLUMN CHILDREN 1 (best selling text)   + CHILDREN 2 (best selling foods),
+
+                                  displayHeight(context) /11,
+
+// TAB BUTTONS , MENU, OFFERS AND CART PAGE BEGINS HERE
 //                                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
 //                                        width: displayWidth(context) /1.8,
                               width: displayWidth(context) / 1.1,
@@ -708,7 +715,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               print('categoryItemsCount: $categoryItemsCount');
 
               return Container(
-                height: displayHeight(context) / 3,
+                height: displayHeight(context) - displayHeight(context) / 3,
                 color: Color(0xFFffffff),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -822,7 +829,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    color: Colors.blueGrey,
+//                    color: Colors.blueGrey,
 //                                  color:Color(0xffDAD7C3),
 
 //                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -835,53 +842,101 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                      padding: const EdgeInsets.all(8),
                       children: <Widget>[
                         Container(
-                          height: 50,
-                          color: Colors.amber[600],
-                          child: Column(
-                            children: <Widget>[
+//                          height: 50,
+//                          color: Colors.amber[600],
+                          child: RaisedButton(
+                            color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                            highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                            padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            child: Column(
+                              children: <Widget>[
 
-                              Icon(
-                                getIconForName(iconNames[0]),
-                                color: Color(0xffFC0000),
-                                size: displayWidth(context) / 13,
+                                Icon(
+                                  getIconForName(iconNames[0]),
+                                  color: Color(0xffFC0000),
+                                  size: displayWidth(context) / 13,
 
-                              ),
-                              Text('${actionkeys[0]}'),
-                            ],
+                                ),
+                                Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
+                              ],
+                            ),
+                            onPressed: () {
+//
+                              print('onPressed pressed ${actionkeys[0]}');
+
+
+                            },
                           ),
                         ),
                         Container(
-                          height: 50,
-                          color: Colors.amber[500],
-                          child: Column(
-                            children: <Widget>[
+                          child: RaisedButton(
+                            color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                            highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                            padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            child: Column(
+                              children: <Widget>[
 
-                              Icon(
-                                getIconForName(iconNames[1]),
-                                color: Color(0xffFC0000),
-                                size: displayWidth(context) / 13,
+                                Icon(
+                                  getIconForName(iconNames[1]),
+                                  color: Color(0xffFC0000),
+                                  size: displayWidth(context) / 13,
 
-                              ),
-                              Text('${actionkeys[1]}'),
-                            ],
+                                ),
+                                Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
+                              ],
+                            ),
+                            onPressed: () {
+//
+                              print('onPressed pressed ${actionkeys[1]}');
+
+
+                            },
                           ),
+
                         ),
+
                         Container(
-                          height: 50,
-                          color: Colors.amber[100],
-                          child: Column(
-                            children: <Widget>[
+                          child: RaisedButton(
+                            color: Colors.white,
+//                            focusColor:Colors.lightBlue,
+//                            hoverColor:Colors.lightBlue,
+                            highlightColor:Color(0xff3F5362),
+//                            splashColor:Colors.deepPurple,
+                            padding: EdgeInsets.all(0),
+//                            margin: EdgeInsets.all(0),
+//                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            child: Column(
+                              children: <Widget>[
 
-                              Icon(
-                                getIconForName(iconNames[2]),
-                                color: Color(0xffFC0000),
-                                size: displayWidth(context) / 13,
+                                Icon(
+                                  getIconForName(iconNames[2]),
+                                  color: Color(0xffFC0000),
+                                  size: displayWidth(context) / 13,
 
-                              ),
-                              Text('${actionkeys[2]}'),
-                            ],
+                                ),
+                                Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
+                              ],
+                            ),
+                            onPressed: () {
+//
+                              print('onPressed pressed ${actionkeys[2]}');
+
+
+                            },
                           ),
+
                         ),
+
                       ],
                     ),
 
