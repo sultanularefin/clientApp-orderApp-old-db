@@ -2,6 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:logger/logger.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+//import 'package:flutter_icons/flutter_icons.dart';
+
+// MODELS ==>
+import 'package:linkupclient/src/DataLayer/models/newCategory.dart';
+import 'package:linkupclient/src/DataLayer/models/FoodItemWithDocID.dart';
+import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
+import 'package:linkupclient/src/DataLayer/models/Restaurant.dart';
 import 'package:linkupclient/src/BLoC/clientShopping_bloc.dart';
 import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/CustomerInformation.dart';
@@ -10,14 +20,6 @@ import 'package:linkupclient/src/DataLayer/models/Order.dart';
 import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
 import 'package:linkupclient/src/screens/clientShoppingCart/ClientShoppingCart.dart';
 import 'package:linkupclient/src/screens/searchFoods/FoodGallerySearch.dart';
-import 'package:logger/logger.dart';
-//import 'package:flutter_icons/flutter_icons.dart';
-
-// MODELS ==>
-import 'package:linkupclient/src/DataLayer/models/newCategory.dart';
-import 'package:linkupclient/src/DataLayer/models/FoodItemWithDocID.dart';
-import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
-import 'package:linkupclient/src/DataLayer/models/Restaurant.dart';
 
 // MODELS ==>
 
@@ -474,7 +476,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
                             Container(
-                              color: Colors.yellowAccent,
+//                              color: Colors.yellowAccent,
                               height: displayHeight(context)-
                                   MediaQuery.of(context).padding.top /* TOP SAFE AREA*/
                                   - MediaQuery.of(context).padding.bottom /* BOTTOM SAFEAREA*/-
@@ -529,7 +531,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
                   Container(
 //                    color:Colors.redAccent,
                     width: displayWidth(context)/5,
-                    alignment: Alignment.topCenter,
+//                    alignment: Alignment.topCenter,
                     height: displayHeight(context) -
                         MediaQuery
                             .of(context)
@@ -789,164 +791,210 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-    return Container(
+    return  Container(
+          margin: EdgeInsets.symmetric(vertical:10,horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical:5,horizontal: 10),
+
+        decoration:
+        new BoxDecoration(
+          borderRadius: new BorderRadius
+              .circular(
+              10.0),
+//                                    color: Colors.purple,
+          color: Colors.white,
+        ),
 
 
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(foodItemName,style: TextStyle(
-                    fontFamily: 'Itim-Regular',
-                    color: Color(0xff3F5362),
-                  ),),
-                  Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
-                    fontFamily: 'Itim-Regular',
-                    color: Color(0xff3F5362),
-                  ),),
-                ],
-              ),
+        child:
+        Neumorphic(
+          // State of Neumorphic (may be convex, flat & emboss)
+
+          /*
+                                      boxShape: NeumorphicBoxShape
+                                          .roundRect(
+                                        BorderRadius.all(
+                                            Radius.circular(15)),
+
+                                      ),
+                                      */
+          curve: Neumorphic.DEFAULT_CURVE,
+          style: NeumorphicStyle(
+            shape: NeumorphicShape
+                .concave,
+            depth: 8,
+            lightSource: LightSource
+                .topLeft,
+            color: Colors.white,
+            boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
             ),
+          ),
+
+//                    MAX_DEPTH,DEFAULT_CURVE
+
+//
+//                      BorderRadius.circular(25),
+//                  border: Border.all(
 
 
-            Container(
-              height: displayHeight(context)/22,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(foodItemName,style: TextStyle(
+                      fontFamily: 'Itim-Regular',
+                      color: Color(0xff3F5362),
+                    ),),
+                    Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
+                      fontFamily: 'Itim-Regular',
+                      color: Color(0xff3F5362),
+                    ),),
+                  ],
+                ),
+              ),
 
-              child:Text('This is so delicious pizza which we'
-                  'offer for our customers from our unique menu',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Itim-Regular',
-                  color: Color(0xff3F5362),
+
+              Container(
+                height: displayHeight(context)/22,
+                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 5),
+
+                child:Text('This is so delicious pizza which we'
+                    'offer for our customers from our unique menu',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Itim-Regular',
+                    color: Color(0xff3F5362),
+                  ),
+
                 ),
 
+
               ),
 
-
-            ),
-
-            Container(
-              padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
-              child: Row(
-                children: <Widget>[
-                  Container(
+              Container(
+                padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
 //                    color: Colors.blueGrey,
 //                                  color:Color(0xffDAD7C3),
 
 //                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
 //                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
-                    width: displayWidth(context)/6,
-                    child:
-                    Column(
+                      width: displayWidth(context)/6,
+                      child:
+                      Column(
 //                      shrinkWrap: false,
 //                      padding: const EdgeInsets.all(8),
-                      children: <Widget>[
-                        Container(
+                        children: <Widget>[
+                          Container(
 //                          height: 50,
 //                          color: Colors.amber[600],
-                          child: RaisedButton(
-                            color: Colors.white,
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                            highlightColor:Color(0xff3F5362),
+                              highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                            padding: EdgeInsets.all(0),
+                              padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            child: Column(
-                              children: <Widget>[
+                              child: Column(
+                                children: <Widget>[
 
-                                Icon(
-                                  getIconForName(iconNames[0]),
-                                  color: Color(0xffFC0000),
-                                  size: displayWidth(context) / 13,
+                                  Icon(
+                                    getIconForName(iconNames[0]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
 
-                                ),
-                                Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
-                            onPressed: () {
+                                  ),
+                                  Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
 //
-                              print('onPressed pressed ${actionkeys[0]}');
+                                print('onPressed pressed ${actionkeys[0]}');
 
 
-                            },
+                              },
+                            ),
                           ),
-                        ),
-                        Container(
-                          child: RaisedButton(
-                            color: Colors.white,
+                          Container(
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                            highlightColor:Color(0xff3F5362),
+                              highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                            padding: EdgeInsets.all(0),
+                              padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            child: Column(
-                              children: <Widget>[
+                              child: Column(
+                                children: <Widget>[
 
-                                Icon(
-                                  getIconForName(iconNames[1]),
-                                  color: Color(0xffFC0000),
-                                  size: displayWidth(context) / 13,
+                                  Icon(
+                                    getIconForName(iconNames[1]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
 
-                                ),
-                                Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
-                            onPressed: () {
+                                  ),
+                                  Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
 //
-                              print('onPressed pressed ${actionkeys[1]}');
+                                print('onPressed pressed ${actionkeys[1]}');
 
 
-                            },
+                              },
+                            ),
+
                           ),
 
-                        ),
-
-                        Container(
-                          child: RaisedButton(
-                            color: Colors.white,
+                          Container(
+                            height: displayHeight(context)/14,
+                            child: RaisedButton(
+                              color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                            highlightColor:Color(0xff3F5362),
+                              highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                            padding: EdgeInsets.all(0),
+                              padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            child: Column(
-                              children: <Widget>[
+                              child: Column(
+                                children: <Widget>[
 
-                                Icon(
-                                  getIconForName(iconNames[2]),
-                                  color: Color(0xffFC0000),
-                                  size: displayWidth(context) / 13,
+                                  Icon(
+                                    getIconForName(iconNames[2]),
+                                    color: Color(0xffFC0000),
+                                    size: displayWidth(context) / 13,
 
-                                ),
-                                Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
-                            onPressed: () {
+                                  ),
+                                  Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
+                                ],
+                              ),
+                              onPressed: () {
 //
-                              print('onPressed pressed ${actionkeys[2]}');
+                                print('onPressed pressed ${actionkeys[2]}');
 
 
-                            },
+                              },
+                            ),
+
                           ),
 
-                        ),
+                        ],
+                      ),
 
-                      ],
+
                     ),
-
-
-                  ),
-                  Container(
+                    Container(
 //                    color: Colors.deepOrange,
 //                                  color:Color(0xffDAD7C3),
 
@@ -954,83 +1002,89 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
 //                      width: displayWidth(context) * 0.57,
-                    child:
+                      padding: EdgeInsets.symmetric(vertical:0,horizontal:5),
+                      child:
 
-                    Container(
-                      height: 150,
-                      width: displayWidth(context)/1.25 -displayWidth(context)/6,
-                      // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
+                      Container(
+
+                        height: (displayHeight(context)/14) *3,
+//                        height: 150,
+                        width: displayWidth(context)/1.25 -displayWidth(context)/6- 20 /*(padding on both sides 10*2 )*/  -10 /* padding on within
+                        the parent container. */,
+                        // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
 
 //                      width: 220,//300-80,
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.rectangle,
+
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.rectangle,
 //          borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
+                          border: Border.all(
 
-                          color: Color(0xff000000),
-                          style: BorderStyle.solid,
-                          width: 2,
+                            color: Color(0xff000000),
+                            style: BorderStyle.solid,
+                            width: 2,
 
+
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
 
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-
-                      ),
 
 
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(26.0)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(26.0)),
 
-                        child: CachedNetworkImage(
+                          child: CachedNetworkImage(
 //                  imageUrl: dummy.url,
-                          imageUrl: foodImageURL,
-                          fit: BoxFit.cover,
-                          placeholder: (context,
-                              url) => new CircularProgressIndicator(),
+                            imageUrl: foodImageURL,
+                            fit: BoxFit.cover,
+                            placeholder: (context,
+                                url) => new CircularProgressIndicator(),
+                          ),
                         ),
-                      ),
 //                        foodImageURL
-                    ),
+                      ),
 
 
-                  )
+                    )
 
-                ],
+                  ],
+                ),
               ),
-            ),
 
 
 
 
 
 
-            Container(
-                height: displayHeight(context) / 10,
-                width: displayWidth(context)/1.25,
+              Container(
+                  height: displayHeight(context) / 10,
+                  width: displayWidth(context)/1.25,
 //                width: displayWidth(context) /1.5,
-                color: Color(0xfff4444aa),
+//                  color: Color(0xfff4444aa),
 //                                                        alignment: Alignment.center,
-                child: buildDefaultIngredients(
-                    context,sanitizedIngredients
-                )
-              //Text('buildDefaultIngredients('
-              //    'context'
-              //')'),
-            ),
-            /*
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
-                ],
+                  child: buildDefaultIngredients(
+                      context,sanitizedIngredients
+                  )
+                //Text('buildDefaultIngredients('
+                //    'context'
+                //')'),
               ),
-            ),
-            */
+              /*
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
+                  ],
+                ),
+              ),
+              */
 
 
 
-          ],
-        )
+            ],
+          )
+      ),
     );
   }
 
@@ -1071,7 +1125,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
             List<NewIngredient> selectedIngredients = snapshot.data;
 
             if( (selectedIngredients ==null) && (selectedIngredients.length ==0)
-                ){
+            ){
 
               return Container(
                   height: displayHeight(context) / 8,
@@ -1159,68 +1213,68 @@ class _MyStatelessWidgetState extends State<ClientHome> {
     return Container(
 
 //            color: Color.fromRGBO(239, 239, 239, 0),
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(
 //                          horizontal: 10.0, vertical: 22.0),
-              horizontal: 8.0, vertical: 0),
+          horizontal: 8.0, vertical: 0),
       child: GestureDetector(
-                  onLongPress: () {
-                    print(
-                        'at Long Press: ');
-                  },
+          onLongPress: () {
+            print(
+                'at Long Press: ');
+          },
 
 
-                  child: Column(
-                    children: <Widget>[
+          child: Column(
+            children: <Widget>[
 
-                      new Container(
+              new Container(
 
 //                                width: displayWidth(context) * 0.09,
 //                                height: displayWidth(context) * 0.11,
-                        width: displayWidth(context) /8,
-                        height: displayWidth(context) /8,
-                        padding:EdgeInsets.symmetric(vertical: 2,horizontal: 3),
+                width: displayWidth(context) /8,
+                height: displayWidth(context) /8,
+                padding:EdgeInsets.symmetric(vertical: 2,horizontal: 3),
 
-                        child: ClipOval(
+                child: ClipOval(
 
-                          child: CachedNetworkImage(
-                            imageUrl: ingredientImageURL,
-                            fit: BoxFit.cover,
-                            placeholder: (context,
-                                url) => new LinearProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Image.network(
-                                    'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
+                  child: CachedNetworkImage(
+                    imageUrl: ingredientImageURL,
+                    fit: BoxFit.cover,
+                    placeholder: (context,
+                        url) => new LinearProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        Image.network(
+                            'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
 //
-                          ),
-                        ),
-                      ),
+                  ),
+                ),
+              ),
 //                              SizedBox(height: 10),
-                      Text(
+              Text(
 
-                        ingredientName,
+                ingredientName,
 
-                        style: TextStyle(
-                          color: Color.fromRGBO(112, 112, 112, 1),
+                style: TextStyle(
+                  color: Color.fromRGBO(112, 112, 112, 1),
 //                                    color: Colors.blueGrey[800],
 
-                          fontWeight: FontWeight.normal,
-                          fontSize: 10,
-                        ),
-                      )
-                      ,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 10,
+                ),
+              )
+              ,
 
 
-                    ],
-                  ),
-                  onTap: () {
-                    print('for future use');
+            ],
+          ),
+          onTap: () {
+            print('for future use');
 //                            return Navigator.push(context,
 //
 //                                MaterialPageRoute(builder: (context)
 //                                => FoodItemDetails())
 //                            );
-                  }
+          }
 
 
 
@@ -1973,12 +2027,13 @@ class _MyStatelessWidgetState extends State<ClientHome> {
               style: BorderStyle.solid,
 //            width: 1,
             ),
-            borderRadius: BorderRadius.circular(3.0),
+            borderRadius: BorderRadius.circular(30.0),
           ),
 
           child:Container(
 //            width:40,
-            height:130,
+//            height:130,
+            height:displayHeight(context)/2.4,
 //    FittedBox(fit:BoxFit.fitWidth, stringifiedFoodItemIngredients
             child: Wrap(
               direction: Axis.vertical,
@@ -2027,9 +2082,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
           ),
 
           child:Container(
-
+            height:displayHeight(context)/2.4,
 //            width:displayWidth(context)/4,
-            width:40,
+//            width:40,
 
             child:
 
