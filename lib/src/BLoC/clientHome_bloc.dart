@@ -72,7 +72,7 @@ class ClientHomeBloc implements Bloc {
 
 //    BLoC/restaurant_bloc.dart:12:  final _controller = StreamController<List<Restaurant>>();
   // 1
-  final _foodItemController = StreamController <List<FoodItemWithDocID>>();
+  final _foodItemController = StreamController <List<FoodItemWithDocID>>.broadcast();
   final _categoriesController = StreamController <List<NewCategoryItem>>();
   final _bestSellingFoodItemsController = StreamController <List<FoodItemWithDocID>>();
 
@@ -263,12 +263,22 @@ class ClientHomeBloc implements Bloc {
 //      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
 
 
+//      final List<dynamic> foodItemIngredientsList2 = oneFoodItem.itemName==null ? null:oneFoodItem.ingredients;
+      List<String> listStringIngredients = foodItemName==null ?null:dynamicListFilteredToStringList(
+          foodItemIngredientsList);
+
+      List<NewIngredient> allIngsScoped= _allIngItemsFGBloc;
+
+
+      List<NewIngredient> sanitizedIngredients = filterSelectedDefaultIngredients(allIngsScoped,
+          listStringIngredients);
+
       FoodItemWithDocID oneFoodItemWithDocID = new FoodItemWithDocID(
         itemName: foodItemName,
         categoryName: foodCategoryName,
         imageURL: foodImageURL,
         sizedFoodPrices: oneFoodSizePriceMap,
-        ingredients: foodItemIngredientsList,
+        ingredients: sanitizedIngredients,
         isAvailable: foodIsAvailable,
         documentId: foodItemDocumentID,
         discount: foodItemDiscount,
@@ -285,6 +295,121 @@ class ClientHomeBloc implements Bloc {
 
 
 
+  }
+
+  // HELPER METHOD  dynamicListFilteredToStringList Number (2)
+
+  List<String> dynamicListFilteredToStringList(List<dynamic> dlist) {
+
+    List<String> stringList = List<String>.from(dlist);
+    return stringList.where((oneItem) =>oneItem.toString().toLowerCase()
+        ==
+        isIngredientExist(oneItem.toString().trim().toLowerCase())).toList();
+
+  }
+
+
+  // HELPER METHOD  isIngredientExist ==> NUMBER 3
+
+
+  String isIngredientExist(String inputString) {
+    List<String> allIngredients = [
+      'ananas',
+      'aurajuusto',
+      'aurinklkuivattu_tomaatti',
+      'cheddar',
+      'emmental_laktoositon',
+      'fetajuusto',
+      'herkkusieni',
+      'jalapeno',
+      'jauheliha',
+      'juusto',
+      'kana',
+      'kanakebab',
+      'kananmuna',
+      'kapris',
+      'katkarapu',
+      'kebab',
+      'kinkku',
+      'mieto_jalapeno',
+      'mozzarella',
+      'oliivi',
+      'paprika',
+      'pekoni',
+      'pepperoni',
+      'persikka',
+      'punasipuli',
+      'rucola',
+      'salaatti',
+      'salami',
+      'savujuusto_hyla',
+      'simpukka',
+      'sipuli',
+      'suolakurkku',
+      'taco_jauheliha',
+      'tomaatti',
+      'tonnikala',
+      'tuore_chili',
+      'tuplajuusto',
+      'vuohejuusto'
+    ];
+
+// String s= allIngredients.where((oneItem) =>oneItem.toLowerCase().contains(inputString.toLowerCase())).toString();
+//
+// print('s , $s');
+
+//firstWhere(bool test(E element), {E orElse()}) {
+    String elementExists = allIngredients.firstWhere(
+            (oneItem) => oneItem.toLowerCase() == inputString.toLowerCase(),
+        orElse: () => '');
+
+    print('elementExists: $elementExists');
+
+    return elementExists;
+
+//allIngredients.every(test(t)) {
+//contains(
+//    searchString2.toLowerCase())).toList();
+  }
+
+
+  // helper method 04 filterSelectedDefaultIngredients
+  List<NewIngredient> filterSelectedDefaultIngredients(List<NewIngredient> allIngList , List<String> listStringIngredients2) {
+// foox
+
+//    logger.w("at filterSelectedDefaultIngredients","filterSelectedDefaultIngredients");
+
+
+
+//    print("allIngList: $allIngList");
+
+    print("listStringIngredients2: $listStringIngredients2");
+    print('allIngList: $allIngList');
+
+
+
+    List<NewIngredient> default2 =[];
+//    List<NewIngredient> y = [];
+    listStringIngredients2.forEach((stringIngredient) {
+      NewIngredient elementExists = allIngList.where(
+              (oneItem) => oneItem.ingredientName.trim().toLowerCase()
+              == stringIngredient.trim().toLowerCase()).first;
+
+      print('elementExists: $elementExists');
+      // WITHOUT THE ABOVE PRINT STATEMENT SOME TIMES THE APPLICATION CRUSHES.
+
+      default2.add(elementExists);
+
+    });
+
+//    _defaultIngItems = default2;
+//    _defaultIngredientListController.sink.add(default2);
+
+//    return default2;
+
+//    logger.i('_defaultIngItems: ',_defaultIngItems);
+
+  return default2;
   }
 
   void getBestSellingFoodItems() async {
@@ -425,6 +550,7 @@ class ClientHomeBloc implements Bloc {
     // need to use this when moving to food Item Details page.
 
     getAllIngredients();
+
     getAllFoodItems();
     getAllCategories();
     getRestaurantInformation();

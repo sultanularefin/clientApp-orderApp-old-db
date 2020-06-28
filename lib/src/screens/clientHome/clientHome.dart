@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:linkupclient/src/BLoC/clientShopping_bloc.dart';
 import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/CustomerInformation.dart';
+import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
 import 'package:linkupclient/src/DataLayer/models/Order.dart';
 import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
 import 'package:linkupclient/src/screens/clientShoppingCart/ClientShoppingCart.dart';
@@ -780,6 +781,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
     String euroPriceFixedTwo = euroPriceDoubled.toStringAsFixed(2);
 
+    List<NewIngredient> sanitizedIngredients = oneSelectedFood.ingredients;
+
 
 
 //    final String fooditemNormalPrice = oneSelectedFood.sizedFoodPrices;
@@ -826,6 +829,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
             ),
 
             Container(
+              padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
               child: Row(
                 children: <Widget>[
                   Container(
@@ -1000,7 +1004,19 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 
 
-
+            Container(
+                height: displayHeight(context) / 10,
+                width: displayWidth(context)/1.25,
+//                width: displayWidth(context) /1.5,
+                color: Color(0xfff4444aa),
+//                                                        alignment: Alignment.center,
+                child: buildDefaultIngredients(
+                    context,sanitizedIngredients
+                )
+              //Text('buildDefaultIngredients('
+              //    'context'
+              //')'),
+            ),
             /*
             Container(
               child: Row(
@@ -1017,6 +1033,201 @@ class _MyStatelessWidgetState extends State<ClientHome> {
         )
     );
   }
+
+  //now now
+  /* DEAFULT INGREDIENT ITEMS BUILD STARTS HERE.*/
+  Widget buildDefaultIngredients(BuildContext context ,List<NewIngredient> sanitizedIngs){
+
+
+//    defaultIngredients
+//    final blocH = BlocProvider.of<FoodItemDetailsBloc>(context);
+//    final blocD = BlocProvider2.of(context).getFoodItemDetailsBlockObject;
+//    final foodItemDetailsbloc = BlocProvider.of<FoodItemDetailsBloc>(context);
+
+    return StreamBuilder<List<NewIngredient>>(
+//        stream: sanitizedIngs,
+        initialData: sanitizedIngs,
+
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+
+            print('!snapshot.hasData');
+//        return Center(child: new LinearProgressIndicator());
+            return
+              Text("No Ingredients, Please Select 1 or more",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
+
+
+              );
+          }
+
+          else {
+
+            print('snapshot.hasData and else statement at FDetailS2');
+            List<NewIngredient> selectedIngredients = snapshot.data;
+
+            if( (selectedIngredients ==null) && (selectedIngredients.length ==0)
+                ){
+
+              return Container(
+                  height: displayHeight(context) / 8,
+//          height:190,
+                  width: displayWidth(context) * 0.57,
+//              color: Colors.yellowAccent,
+//                    color: Color(0xff54463E),
+                  color: Color(0xFFffffff),
+                  alignment: Alignment.center,
+
+                  // PPPPP
+
+                  child:(
+                      Text("No Ingredients, Please Select 1 or more",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      )
+                  )
+              );
+            }
+
+            else{
+
+              return Container(
+                color: Color(0xFFffffff),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+
+
+                  /*
+                  gridDelegate:
+                  new SliverGridDelegateWithMaxCrossAxisExtent(
+
+
+
+
+
+
+                    maxCrossAxisExtent: 180,
+                    mainAxisSpacing: 0, // Vertical  direction
+                    crossAxisSpacing: 5,
+                    childAspectRatio: 200 / 280,
+
+
+                  ),
+
+                  */
+                  shrinkWrap: true,
+//        final String foodItemName =          filteredItems[index].itemName;
+//        final String foodImageURL =          filteredItems[index].imageURL;
+                  itemCount: selectedIngredients
+                      .length,
+                  itemBuilder: (_, int index) {
+                    return oneDefaultIngredient(selectedIngredients[index],
+                        index);
+                  },
+                ),
+              );
+            }
+          }
+        }
+    );
+  }
+
+
+  Widget oneDefaultIngredient(NewIngredient oneSelected,int index){
+    final String ingredientName = oneSelected.ingredientName;
+//                  final dynamic ingredientImageURL = document['image'];
+//    final num ingredientPrice = document['price'];
+
+    final dynamic ingredientImageURL = oneSelected.imageURL == '' ?
+    'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2FfoodItem404.jpg?alt=media'
+        :
+    storageBucketURLPredicate +
+        Uri.encodeComponent(oneSelected.imageURL)
+
+        + '?alt=media';
+
+
+//    print('ingredientImageUR L   L    L   L: $ingredientImageURL');
+
+    return Container(
+
+//            color: Color.fromRGBO(239, 239, 239, 0),
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(
+//                          horizontal: 10.0, vertical: 22.0),
+              horizontal: 8.0, vertical: 0),
+      child: GestureDetector(
+                  onLongPress: () {
+                    print(
+                        'at Long Press: ');
+                  },
+
+
+                  child: Column(
+                    children: <Widget>[
+
+                      new Container(
+
+//                                width: displayWidth(context) * 0.09,
+//                                height: displayWidth(context) * 0.11,
+                        width: displayWidth(context) /8,
+                        height: displayWidth(context) /8,
+                        padding:EdgeInsets.symmetric(vertical: 2,horizontal: 3),
+
+                        child: ClipOval(
+
+                          child: CachedNetworkImage(
+                            imageUrl: ingredientImageURL,
+                            fit: BoxFit.cover,
+                            placeholder: (context,
+                                url) => new LinearProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Image.network(
+                                    'https://firebasestorage.googleapis.com/v0/b/link-up-b0a24.appspot.com/o/404%2Fingredient404.jpg?alt=media'),
+//
+                          ),
+                        ),
+                      ),
+//                              SizedBox(height: 10),
+                      Text(
+
+                        ingredientName,
+
+                        style: TextStyle(
+                          color: Color.fromRGBO(112, 112, 112, 1),
+//                                    color: Colors.blueGrey[800],
+
+                          fontWeight: FontWeight.normal,
+                          fontSize: 10,
+                        ),
+                      )
+                      ,
+
+
+                    ],
+                  ),
+                  onTap: () {
+                    print('for future use');
+//                            return Navigator.push(context,
+//
+//                                MaterialPageRoute(builder: (context)
+//                                => FoodItemDetails())
+//                            );
+                  }
+
+
+
+      ),
+    );
+  }
+
 
 
 
