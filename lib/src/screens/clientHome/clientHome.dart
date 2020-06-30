@@ -60,9 +60,54 @@ class _MyStatelessWidgetState extends State<ClientHome> {
   String _currentCategory = "pizza";
   String _firstTimeCategoryString = "";
 //  int _currentTabTypeIndex =0;
+  List<NewIngredient> allIngredientsInitState;
 
 
   // STATE VARIABLES ends here. .
+
+
+
+  @override
+  void initState() {
+    retrieveIngredients1();
+//    retrieveIngredients1();
+    super.initState();
+
+  }
+
+
+
+
+
+  Future<void> retrieveIngredients1() async {
+
+    debugPrint("Entering in retrieveIngredients1");
+
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+
+//    List<NewIngredient> allIngredientsInitState = blocH.getAllIngredients();
+
+
+
+    await blocH.getAllIngredients().then((onValue){
+
+      List<NewIngredient> ingredients = onValue;
+
+
+
+
+      setState(() {
+
+        allIngredientsInitState = ingredients;
+
+      }
+      );
+
+    }
+    );
+  }
+
+
 
 
   @override
@@ -734,8 +779,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
 //                  print(
 //                      'valuePrice at line # 583: $valuePrice and key is $key');
-                    return oneMenuItemFromFoodItem(filteredItemsByCategory[index],index
-                    );
+                    return oneMenuItemFromFoodItem(filteredItemsByCategory[index],index);
                   },
 
 //      controller: new ScrollController(
@@ -761,7 +805,127 @@ class _MyStatelessWidgetState extends State<ClientHome> {
     */
   }
 
+
+
+// no widget but helper methods, like conversion and other stuffs are done here.
+
   num tryCast<num>(dynamic x, {num fallback }) => x is num ? x : 0.0;
+
+  List<String> dynamicListFilteredToStringList(List<dynamic> dlist) {
+
+
+    List<String> stringList = List<String>.from(dlist);
+    return stringList.where((oneItem) =>oneItem.toString().toLowerCase()
+        ==
+        isIngredientExist(oneItem.toString().trim().toLowerCase())).toList();
+
+  }
+
+
+  // HELPER METHOD  isIngredientExist ==> NUMBER 3
+
+
+  String isIngredientExist(String inputString) {
+    List<String> allIngredients = [
+      'ananas',
+      'aurajuusto',
+      'aurinklkuivattu_tomaatti',
+      'cheddar',
+      'emmental_laktoositon',
+      'fetajuusto',
+      'herkkusieni',
+      'jalapeno',
+      'jauheliha',
+      'juusto',
+      'kana',
+      'kanakebab',
+      'kananmuna',
+      'kapris',
+      'katkarapu',
+      'kebab',
+      'kinkku',
+      'mieto_jalapeno',
+      'mozzarella',
+      'oliivi',
+      'paprika',
+      'pekoni',
+      'pepperoni',
+      'persikka',
+      'punasipuli',
+      'rucola',
+      'salaatti',
+      'salami',
+      'savujuusto_hyla',
+      'simpukka',
+      'sipuli',
+      'suolakurkku',
+      'taco_jauheliha',
+      'tomaatti',
+      'tonnikala',
+      'tuore_chili',
+      'tuplajuusto',
+      'vuohejuusto'
+    ];
+
+// String s= allIngredients.where((oneItem) =>oneItem.toLowerCase().contains(inputString.toLowerCase())).toString();
+//
+// print('s , $s');
+
+//firstWhere(bool test(E element), {E orElse()}) {
+    String elementExists = allIngredients.firstWhere(
+            (oneItem) => oneItem.toLowerCase() == inputString.toLowerCase(),
+        orElse: () => '');
+
+//    print('elementExists: $elementExists');
+
+    return elementExists;
+
+//allIngredients.every(test(t)) {
+//contains(
+//    searchString2.toLowerCase())).toList();
+  }
+
+  // helper method 04 filterSelectedDefaultIngredients
+  List<NewIngredient> filterSelectedDefaultIngredients(List<dynamic> dlist, List<NewIngredient> allIngList
+      /*List<String> listStringIngredients2*/ ) {
+
+
+
+    List<String> listStringIngredients = dynamicListFilteredToStringList(
+        dlist);
+
+
+    print('allIngList: $allIngList');
+
+
+
+    List<NewIngredient> default2 =[];
+//    List<NewIngredient> y = [];
+    listStringIngredients.forEach((stringIngredient) {
+      print(':   :   >   >  > stringIngredient: $stringIngredient');
+
+      NewIngredient elementExists = allIngList.where(
+              (oneItem) => oneItem.ingredientName.trim().toLowerCase()
+              == stringIngredient.trim().toLowerCase()).first;
+
+      print('elementExists: $elementExists');
+      // WITHOUT THE ABOVE PRINT STATEMENT SOME TIMES THE APPLICATION CRUSHES.
+
+      default2.add(elementExists);
+
+    });
+
+//    _defaultIngItems = default2;
+//    _defaultIngredientListController.sink.add(default2);
+
+//    return default2;
+
+//    logger.i('_defaultIngItems: ',_defaultIngItems);
+
+    return default2;
+  }
+
+
 
   Widget oneMenuItemFromFoodItem(FoodItemWithDocID oneSelectedFood,int index){
 
@@ -787,7 +951,8 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 
     String euroPriceFixedTwo = euroPriceDoubled.toStringAsFixed(2);
 
-    List<NewIngredient> sanitizedIngredients = oneSelectedFood.ingredients;
+    List<NewIngredient> sanitizedIngredients =  filterSelectedDefaultIngredients(oneSelectedFood.inglist,allIngredientsInitState);
+    // oneSelectedFood.ingredients;
 
 
 

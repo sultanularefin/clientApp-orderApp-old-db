@@ -190,11 +190,13 @@ class ClientHomeBloc implements Bloc {
   }
 
 
-  Future<void> getAllIngredients() async {
+  Future <List<NewIngredient>> getAllIngredients() async {
 
 
     var snapshot = await _client.fetchAllIngredients();
     List docList = snapshot.documents;
+
+//    logger.e('ingredient docList: $docList');
 
 
 
@@ -206,9 +208,14 @@ class ClientHomeBloc implements Bloc {
     ).toList();
 
 
+//    logger.e('ingItems: $ingItems');
+
+
     List<String> documents = snapshot.documents.map((documentSnapshot) =>
     documentSnapshot.documentID
     ).toList();
+
+    logger.e('documents: $documents');
 
     // print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
 
@@ -218,7 +225,9 @@ class ClientHomeBloc implements Bloc {
     _allIngredientListController.sink.add(ingItems);
 
 
-//    return ingItems;
+    return ingItems;
+
+
 
   }
 
@@ -226,7 +235,13 @@ class ClientHomeBloc implements Bloc {
 //  Future<List<FoodItemWithDocID>> getAllFoodItems() async {
   void getAllFoodItems() async {
 
+
+    logger.e('getAllFoodItems() invoking: checking if ingredients exist ::: $_allIngItemsFGBloc');
+    print('_allIngItemsFGBloc is List<NewIngredient>: ${_allIngItemsFGBloc is List<NewIngredient>} or '
+        '_allIngItemsFGBloc.length ==0'
+        ' ${_allIngItemsFGBloc.length ==0} or _allIngItemsFGBloc ==null ${_allIngItemsFGBloc == null}');
     var snapshot = await _client.fetchFoodItems();
+
     List docList = snapshot.documents;
 
 
@@ -268,29 +283,21 @@ class ClientHomeBloc implements Bloc {
       final double foodItemDiscount = doc['discount'];
       final int foodItemSL = doc['sl'];
 
-//      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
 
-
-//      final List<dynamic> foodItemIngredientsList2 = oneFoodItem.itemName==null ? null:oneFoodItem.ingredients;
-      List<String> listStringIngredients = foodItemName==null ?null:dynamicListFilteredToStringList(
-          foodItemIngredientsList);
-
-      List<NewIngredient> allIngsScoped= _allIngItemsFGBloc;
-
-
-      List<NewIngredient> sanitizedIngredients = filterSelectedDefaultIngredients(allIngsScoped,
-          listStringIngredients);
+//      List<NewIngredient> sanitizedIngredients =
 
       FoodItemWithDocID oneFoodItemWithDocID = new FoodItemWithDocID(
         itemName: foodItemName,
         categoryName: foodCategoryName,
         imageURL: foodImageURL,
         sizedFoodPrices: oneFoodSizePriceMap,
-        ingredients: sanitizedIngredients,
+        ingredients: null,  /*filterSelectedDefaultIngredients(foodItemIngredientsList), */ /*sanitizedIngredients,*/ /*foodItemIngredientsList,*/
         isAvailable: foodIsAvailable,
         documentId: foodItemDocumentID,
         discount: foodItemDiscount,
         sl:foodItemSL,
+        inglist:foodItemIngredientsList,
+
       );
 
       tempAllFoodsList.add(oneFoodItemWithDocID);
@@ -308,6 +315,7 @@ class ClientHomeBloc implements Bloc {
   // HELPER METHOD  dynamicListFilteredToStringList Number (2)
 
   List<String> dynamicListFilteredToStringList(List<dynamic> dlist) {
+
 
     List<String> stringList = List<String>.from(dlist);
     return stringList.where((oneItem) =>oneItem.toString().toLowerCase()
@@ -371,7 +379,7 @@ class ClientHomeBloc implements Bloc {
             (oneItem) => oneItem.toLowerCase() == inputString.toLowerCase(),
         orElse: () => '');
 
-    print('elementExists: $elementExists');
+//    print('elementExists: $elementExists');
 
     return elementExists;
 
@@ -381,8 +389,12 @@ class ClientHomeBloc implements Bloc {
   }
 
 
+  /*
   // helper method 04 filterSelectedDefaultIngredients
-  List<NewIngredient> filterSelectedDefaultIngredients(List<NewIngredient> allIngList , List<String> listStringIngredients2) {
+  List<NewIngredient> filterSelectedDefaultIngredients(List<dynamic> dlist /*List<NewIngredient> allIngList ,
+      List<String> listStringIngredients2 */) {
+
+//    foodItemIngredientsList
 // foox
 
 //    logger.w("at filterSelectedDefaultIngredients","filterSelectedDefaultIngredients");
@@ -417,8 +429,10 @@ class ClientHomeBloc implements Bloc {
 
 //    logger.i('_defaultIngItems: ',_defaultIngItems);
 
-  return default2;
+    return default2;
   }
+
+  */
 
   void getBestSellingFoodItems() async {
 
@@ -473,7 +487,7 @@ class ClientHomeBloc implements Bloc {
         categoryName: foodCategoryName,
         imageURL: foodImageURL,
         sizedFoodPrices: oneFoodSizePriceMap,
-        ingredients: foodItemIngredientsList,
+        ingredients: /*null,*/foodItemIngredientsList,
         isAvailable: foodIsAvailable,
         documentId: foodItemDocumentID,
         discount: foodItemDiscount,
@@ -564,7 +578,10 @@ class ClientHomeBloc implements Bloc {
     getRestaurantInformation();
     initiateMenuOfferCartTypeSingleSelectOptions();
     initiateLocalOffers();
+//    if(_allIngItemsFGBloc.length!=0) {
     getAllFoodItems();
+//    }
+
     getBestSellingFoodItems();
 
 

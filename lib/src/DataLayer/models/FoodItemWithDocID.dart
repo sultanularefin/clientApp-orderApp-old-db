@@ -26,6 +26,7 @@ class FoodItemWithDocID {
   String documentId;
   double discount;
   int sl;
+  List<dynamic> inglist;
 
   FoodItemWithDocID(
       {
@@ -45,6 +46,7 @@ class FoodItemWithDocID {
         this.documentId,
         this.discount,
         this.sl,
+        this.inglist,
       }
       );
 
