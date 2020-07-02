@@ -46,7 +46,7 @@ and show those in a separate list. That too can be solved with the BLoC pattern.
 
 //Map<String, int> mapOneSize = new Map();
 
-class FoodItemDetailsBloc /*with ChangeNotifier */ implements Bloc  {
+class ClientFoodItemDetailsBloc /*with ChangeNotifier */ implements Bloc  {
 
 
 
@@ -209,7 +209,7 @@ class FoodItemDetailsBloc /*with ChangeNotifier */ implements Bloc  {
   }
 
   // CONSTRUCTOR BEGINS HERE.
-  FoodItemDetailsBloc(FoodItemWithDocID oneFoodItem, List<NewIngredient> allIngsScoped ) {
+  ClientFoodItemDetailsBloc(FoodItemWithDocID oneFoodItem, List<NewIngredient> allIngsScoped ) {
 
 //    if(allIngsScoped==[]) return;
 

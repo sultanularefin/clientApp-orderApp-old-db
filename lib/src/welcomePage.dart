@@ -41,7 +41,7 @@ import 'package:linkupclient/src/screens/foodGallery/foodgallery2.dart';
 //import 'package:linkupclient/src/BLoC/bloc_provider2.dart';
 //import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
 import 'package:linkupclient/src/BLoC/clientHome_bloc.dart';
-//import 'package:linkupclient/src/BLoC/foodItemDetails_bloc.dart';
+//import 'package:linkupclient/src/BLoC/clientFoodItemDetails_bloc.dart';
 //import 'package:linkupclient/src/utilities/screen_size_reducers.dart';
 
 

@@ -14,8 +14,9 @@ import 'package:linkupclient/src/DataLayer/models/CustomerInformation.dart';
 import 'package:linkupclient/src/DataLayer/models/SelectedFood.dart';
 import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
 import 'package:linkupclient/src/DataLayer/models/Order.dart';
+import 'package:linkupclient/src/screens/clientFoodItemDetails/clientFoodItemDetails.dart';
 // import 'package:linkupclient/src/screens/foodGalleryDrawer/DrawerScreenFoodGallery.dart';
-import 'package:linkupclient/src/screens/foodItemDetailsPage/foodItemDetails2.dart';
+//import 'package:linkupclient/src/screens/foodItemDetailsPage/foodItemDetails2.dart';
 
 //import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
@@ -61,7 +62,7 @@ import 'package:linkupclient/src/BLoC/bloc_provider.dart';
 
 import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
 //import 'package:linkupclient/src/BLoC/foodItems_query_bloc.dart';
-import 'package:linkupclient/src/BLoC/foodItemDetails_bloc.dart';
+import 'package:linkupclient/src/BLoC/clientFoodItemDetails_bloc.dart';
 
 //import './../../shared/category_Constants.dart' as Constants;
 
@@ -2593,13 +2594,13 @@ Widget work1(BuildContext context){
 
          */
 
-        BlocProvider<FoodItemDetailsBloc>(
-          bloc: FoodItemDetailsBloc(
+        BlocProvider<ClientFoodItemDetailsBloc>(
+          bloc: ClientFoodItemDetailsBloc(
               oneFoodItem,
               tempIngs),
 
 
-          child: FoodItemDetails2()
+          child: ClientFoodItemDetails()
 
           ,),
 

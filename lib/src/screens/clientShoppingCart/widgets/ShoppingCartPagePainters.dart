@@ -252,8 +252,8 @@ class LongHeaderPainterAfterShoppingCartPage extends CustomPainter {
   void paint(Canvas canvas, Size size){
 
 //    canvas.drawLine(...);
-    final p1 = Offset(displayWidth(context)/2.8, 15); //(X,Y) TO (X,Y)
-    final p2 = Offset(10, 15);
+    final p1 = Offset(displayWidth(context)/2, 12); //(X,Y) TO (X,Y)
+    final p2 = Offset(10, 12);
     final paint = Paint()
       ..color = Color(0xff000000)
 //          Colors.white

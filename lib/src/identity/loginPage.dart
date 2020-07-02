@@ -25,7 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:linkupclient/src/BLoC/bloc_provider.dart';
 //import 'package:linkupclient/src/BLoC/bloc_provider2.dart';
 //import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
-//import 'package:linkupclient/src/BLoC/foodItemDetails_bloc.dart';
+//import 'package:linkupclient/src/BLoC/clientFoodItemDetails_bloc.dart';
 //import 'package:linkupclient/src/BLoC/app_bloc.dart';
 import 'package:linkupclient/src/BLoC/identity_bloc.dart';
 

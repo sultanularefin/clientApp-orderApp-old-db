@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:linkupclient/src/BLoC/clientFoodItemDetails_bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/Offer.dart';
+import 'package:linkupclient/src/screens/clientFoodItemDetails/clientFoodItemDetails.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -955,6 +957,7 @@ class _MyStatelessWidgetState extends State<ClientHome> {
     // oneSelectedFood.ingredients;
 
 
+    oneSelectedFood.ingredients=sanitizedIngredients;
 
 //    final String fooditemNormalPrice = oneSelectedFood.sizedFoodPrices;
 
@@ -974,29 +977,26 @@ class _MyStatelessWidgetState extends State<ClientHome> {
         ),
 
 
-        child:
-        Neumorphic(
-          // State of Neumorphic (may be convex, flat & emboss)
+           child: Neumorphic(
+            // State of Neumorphic (may be convex, flat & emboss)
 
-          /*
-                                      boxShape: NeumorphicBoxShape
-                                          .roundRect(
-                                        BorderRadius.all(
-                                            Radius.circular(15)),
+            /*
+                                        boxShape: NeumorphicBoxShape
+                                            .roundRect(
+                                          BorderRadius.all(
+                                              Radius.circular(15)),
 
-                                      ),
-                                      */
-          curve: Neumorphic.DEFAULT_CURVE,
-          style: NeumorphicStyle(
-            shape: NeumorphicShape
-                .concave,
-            depth: 8,
-            lightSource: LightSource
-                .topLeft,
-            color: Colors.white,
-            boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
+                                        ),
+                                        */
+            curve: Neumorphic.DEFAULT_CURVE,
+            style: NeumorphicStyle(
+              shape: NeumorphicShape.concave,
+              depth: 8,
+              lightSource: LightSource.top,
+              color: Colors.white,
+              boxShape:NeumorphicBoxShape.roundRect(BorderRadius.all(Radius.circular(15)),
+              ),
             ),
-          ),
 
 //                    MAX_DEPTH,DEFAULT_CURVE
 
@@ -1005,165 +1005,171 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                  border: Border.all(
 
 
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text(foodItemName,style: TextStyle(
-                      fontFamily: 'Itim-Regular',
-                      color: Color(0xff3F5362),
-                    ),),
-                    Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
-                      fontFamily: 'Itim-Regular',
-                      color: Color(0xff3F5362),
-                    ),),
-                  ],
-                ),
-              ),
+            child: InkWell(
+              onTap: () {
+                _navigateAndDisplaySelection(
+                    context, oneSelectedFood);
+              },
 
-
-              Container(
-                height: displayHeight(context)/22,
-                padding:EdgeInsets.symmetric(vertical: 0,horizontal: 5),
-
-                child:Text('This is so delicious pizza which we'
-                    'offer for our customers from our unique menu',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Itim-Regular',
-                    color: Color(0xff3F5362),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(foodItemName,style: TextStyle(
+                          fontFamily: 'Itim-Regular',
+                          color: Color(0xff3F5362),
+                        ),),
+                        Text(euroPriceFixedTwo + '\u20AC',style: TextStyle(
+                          fontFamily: 'Itim-Regular',
+                          color: Color(0xff3F5362),
+                        ),),
+                      ],
+                    ),
                   ),
 
-                ),
+
+                  Container(
+                    height: displayHeight(context)/22,
+                    padding:EdgeInsets.symmetric(vertical: 0,horizontal: 5),
+
+                    child:Text('This is so delicious pizza which we'
+                        'offer for our customers from our unique menu',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Itim-Regular',
+                        color: Color(0xff3F5362),
+                      ),
+
+                    ),
 
 
-              ),
+                  ),
 
-              Container(
-                padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical:10,horizontal: 0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
 //                    color: Colors.blueGrey,
 //                                  color:Color(0xffDAD7C3),
 
 //                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
 //                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
-                      width: displayWidth(context)/6,
-                      child:
-                      Column(
+                          width: displayWidth(context)/6,
+                          child:
+                          Column(
 //                      shrinkWrap: false,
 //                      padding: const EdgeInsets.all(8),
-                        children: <Widget>[
-                          Container(
+                            children: <Widget>[
+                              Container(
 //                          height: 50,
 //                          color: Colors.amber[600],
-                            height: displayHeight(context)/14,
-                            child: RaisedButton(
-                              color: Colors.white,
+                                height: displayHeight(context)/14,
+                                child: RaisedButton(
+                                  color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                              highlightColor:Color(0xff3F5362),
+                                  highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                              padding: EdgeInsets.all(0),
+                                  padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              child: Column(
-                                children: <Widget>[
+                                  child: Column(
+                                    children: <Widget>[
 
-                                  Icon(
-                                    getIconForName(iconNames[0]),
-                                    color: Color(0xffFC0000),
-                                    size: displayWidth(context) / 13,
+                                      Icon(
+                                        getIconForName(iconNames[0]),
+                                        color: Color(0xffFC0000),
+                                        size: displayWidth(context) / 13,
 
+                                      ),
+                                      Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
+                                    ],
                                   ),
-                                  Text('${actionkeys[0]}',style: TextStyle(fontSize: 11),),
-                                ],
-                              ),
-                              onPressed: () {
+                                  onPressed: () {
 //
-                                print('onPressed pressed ${actionkeys[0]}');
+                                    print('onPressed pressed ${actionkeys[0]}');
 
 
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: displayHeight(context)/14,
-                            child: RaisedButton(
-                              color: Colors.white,
+                                  },
+                                ),
+                              ),
+                              Container(
+                                height: displayHeight(context)/14,
+                                child: RaisedButton(
+                                  color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                              highlightColor:Color(0xff3F5362),
+                                  highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                              padding: EdgeInsets.all(0),
+                                  padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              child: Column(
-                                children: <Widget>[
+                                  child: Column(
+                                    children: <Widget>[
 
-                                  Icon(
-                                    getIconForName(iconNames[1]),
-                                    color: Color(0xffFC0000),
-                                    size: displayWidth(context) / 13,
+                                      Icon(
+                                        getIconForName(iconNames[1]),
+                                        color: Color(0xffFC0000),
+                                        size: displayWidth(context) / 13,
 
+                                      ),
+                                      Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
+                                    ],
                                   ),
-                                  Text('${actionkeys[1]}',style: TextStyle(fontSize: 11),),
-                                ],
-                              ),
-                              onPressed: () {
+                                  onPressed: () {
 //
-                                print('onPressed pressed ${actionkeys[1]}');
+                                    print('onPressed pressed ${actionkeys[1]}');
 
 
-                              },
-                            ),
+                                  },
+                                ),
 
-                          ),
+                              ),
 
-                          Container(
-                            height: displayHeight(context)/14,
-                            child: RaisedButton(
-                              color: Colors.white,
+                              Container(
+                                height: displayHeight(context)/14,
+                                child: RaisedButton(
+                                  color: Colors.white,
 //                            focusColor:Colors.lightBlue,
 //                            hoverColor:Colors.lightBlue,
-                              highlightColor:Color(0xff3F5362),
+                                  highlightColor:Color(0xff3F5362),
 //                            splashColor:Colors.deepPurple,
-                              padding: EdgeInsets.all(0),
+                                  padding: EdgeInsets.all(0),
 //                            margin: EdgeInsets.all(0),
 //                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              child: Column(
-                                children: <Widget>[
+                                  child: Column(
+                                    children: <Widget>[
 
-                                  Icon(
-                                    getIconForName(iconNames[2]),
-                                    color: Color(0xffFC0000),
-                                    size: displayWidth(context) / 13,
+                                      Icon(
+                                        getIconForName(iconNames[2]),
+                                        color: Color(0xffFC0000),
+                                        size: displayWidth(context) / 13,
 
+                                      ),
+                                      Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
+                                    ],
                                   ),
-                                  Text('${actionkeys[2]}',style: TextStyle(fontSize: 11),),
-                                ],
-                              ),
-                              onPressed: () {
+                                  onPressed: () {
 //
-                                print('onPressed pressed ${actionkeys[2]}');
+                                    print('onPressed pressed ${actionkeys[2]}');
 
 
-                              },
-                            ),
+                                  },
+                                ),
 
+                              ),
+
+                            ],
                           ),
 
-                        ],
-                      ),
 
-
-                    ),
-                    Container(
+                        ),
+                        Container(
 //                    color: Colors.deepOrange,
 //                                  color:Color(0xffDAD7C3),
 
@@ -1171,89 +1177,91 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
 //                      width: displayWidth(context) * 0.57,
-                      padding: EdgeInsets.symmetric(vertical:0,horizontal:5),
-                      child:
+                          padding: EdgeInsets.symmetric(vertical:0,horizontal:5),
+                          child:
 
-                      Container(
+                          Container(
 
-                        height: (displayHeight(context)/14) *3,
+                            height: (displayHeight(context)/14) *3,
 //                        height: 150,
-                        width: displayWidth(context)/1.25 -displayWidth(context)/6- 20 /*(padding on both sides 10*2 )*/  -10 /* padding on within
-                        the parent container. */,
-                        // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
+                            width: displayWidth(context)/1.25 -displayWidth(context)/6- 20 /*(padding on both sides 10*2 )*/  -10 /* padding on within
+                            the parent container. */,
+                            // WIDTH: WIDTH OF PARENT CONTAINER - ACTION BUTTONS WIDTH
 
 //                      width: 220,//300-80,
 
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.rectangle,
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.rectangle,
 //          borderRadius: BorderRadius.circular(25),
-                          border: Border.all(
+                              border: Border.all(
 
-                            color: Color(0xff000000),
-                            style: BorderStyle.solid,
-                            width: 2,
-
-
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-
-                        ),
+                                color: Color(0xff000000),
+                                style: BorderStyle.solid,
+                                width: 2,
 
 
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(26.0)),
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
 
-                          child: CachedNetworkImage(
+                            ),
+
+
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(26.0)),
+
+                              child: CachedNetworkImage(
 //                  imageUrl: dummy.url,
-                            imageUrl: foodImageURL,
-                            fit: BoxFit.cover,
-                            placeholder: (context,
-                                url) => new CircularProgressIndicator(),
-                          ),
-                        ),
+                                imageUrl: foodImageURL,
+                                fit: BoxFit.cover,
+                                placeholder: (context,
+                                    url) => new CircularProgressIndicator(),
+                              ),
+                            ),
 //                        foodImageURL
-                      ),
+                          ),
 
 
-                    )
+                        )
 
-                  ],
-                ),
-              ),
-
-
-
+                      ],
+                    ),
+                  ),
 
 
 
-              Container(
-                  height: displayHeight(context) / 10,
-                  width: displayWidth(context)/1.25,
+
+
+
+                  Container(
+                      height: displayHeight(context) / 10,
+                      width: displayWidth(context)/1.25,
 //                width: displayWidth(context) /1.5,
 //                  color: Color(0xfff4444aa),
 //                                                        alignment: Alignment.center,
-                  child: buildDefaultIngredients(
-                      context,sanitizedIngredients
-                  )
-                //Text('buildDefaultIngredients('
-                //    'context'
-                //')'),
+                      child: buildDefaultIngredients(
+                          context,sanitizedIngredients
+                      )
+                    //Text('buildDefaultIngredients('
+                    //    'context'
+                    //')'),
+                  ),
+                  /*
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
+                      ],
+                    ),
+                  ),
+                  */
+
+
+
+                ],
               ),
-              /*
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Text('oneRestaurant.selectedTabIndex: ${oneRestaurant.selectedTabIndex}'),
-                  ],
-                ),
-              ),
-              */
-
-
-
-            ],
-          )
+            )
       ),
+
     );
   }
 
@@ -2183,8 +2191,9 @@ class _MyStatelessWidgetState extends State<ClientHome> {
         ),
 
         onTap: () {
-          _navigateAndDisplaySelection(
-              context, oneSelectedFood);
+          print('one best selling food');
+//          _navigateAndDisplaySelection(
+//              context, oneSelectedFood);
         },
       ),
 
@@ -2589,9 +2598,69 @@ class _MyStatelessWidgetState extends State<ClientHome> {
 //    );
   }
 
-  _navigateAndDisplaySelection(BuildContext context,FoodItemWithDocID oneFoodItem) async {
+  _navigateAndDisplaySelection(BuildContext context,FoodItemWithDocID oneFoodItem){
 
     print('at _navigateAndDisplaySelection');
+
+    final blocH = BlocProvider.of<ClientHomeBloc>(context);
+
+
+//    final blocG =
+//        BlocProvider2.of(context).getFoodGalleryBlockObject;
+
+    List<NewIngredient> tempIngs = blocH.getAllIngredientsPublicFGB2;
+
+
+    return Navigator.of(context).push(
+
+
+      PageRouteBuilder(
+        opaque: false,
+        transitionDuration: Duration(
+            milliseconds: 900),
+        pageBuilder: (_, __, ___) =>
+        /*
+            BlocProvider2 /*<FoodItemDetailsBloc>*/(
+              /* thisAllIngredients2:allIngredients,*/
+              /*bloc: FoodItemDetailsBloc(
+                                                  oneFoodItem,
+                                                  allIngredients), */
+
+                bloc2: AppBloc(
+                    oneFoodItem, tempIngs
+                  /*allIngredients,*/ /*fromWhichPage:1*/),
+
+
+                child: FoodItemDetails2()
+
+            ),
+
+         */
+
+        BlocProvider<ClientFoodItemDetailsBloc>(
+          bloc: ClientFoodItemDetailsBloc(
+              oneFoodItem,
+              tempIngs),
+
+          child: ClientFoodItemDetails()
+
+          ,),
+
+
+        // fUTURE USE -- ANIMATION TRANSITION CODE.
+        /*
+                                  transitionsBuilder: (___, Animation<double> animation, ____, Widget child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: RotationTransition(
+                                        turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+                                        child: child,
+                                      ),
+                                    );
+                                  }
+                                  */
+      ),
+    );
 
   }
 
