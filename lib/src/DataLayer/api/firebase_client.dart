@@ -198,7 +198,7 @@ class FirebaseClient {
   }
 
 
-  List <Map<String, dynamic>> /*<OrderedFood>*/ converterFoods (List<SelectedFood> sf){
+  List <Map<String, dynamic>> /*<OrderedFood>*/ convertedFoods (List<SelectedFood> sf){
 
     List<Map<String, dynamic>> testFoodItems = new List<Map<String, dynamic>>();
     int counter=0;
@@ -271,7 +271,7 @@ class FirebaseClient {
       'end': FieldValue.serverTimestamp(),
 //      'items': [],
 
-      'items': converterFoods(tempSelectedFood),
+      'items': convertedFoods(tempSelectedFood),
       'orderby': orderBy,
       'p_status': paidType != 'Later' ? 'Paid' : 'Unpaid',
       'p_type': paidType,
