@@ -1,4 +1,4 @@
-package com.linkup.linkupclient
+package com.arefin.kebabbankoldclient
 
 import io.flutter.embedding.android.FlutterActivity
 
