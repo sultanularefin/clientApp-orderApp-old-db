@@ -105,20 +105,20 @@ class FoodGalleryBloc implements Bloc {
 
 
     var snapshot = await _client.fetchAllIngredients();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
 
     List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
+    ingItems = snapshot.docs.map((documentSnapshot) =>
         NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
+          (documentSnapshot.data(), documentSnapshot.id)
 
     ).toList();
 
 
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
+    List<String> documents = snapshot.docs.map((documentSnapshot) =>
+    documentSnapshot.id
     ).toList();
 
     // print('documents are [Ingredient Documents] at food Gallery Block : ${documents.length}');
@@ -138,7 +138,7 @@ class FoodGalleryBloc implements Bloc {
   void getAllFoodItems() async {
 
     var snapshot = await _client.fetchFoodItems();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
     List<FoodItemWithDocID> tempAllFoodsList= new List<FoodItemWithDocID>();
     docList.forEach((doc) {
@@ -218,7 +218,7 @@ class FoodGalleryBloc implements Bloc {
 
 
     var snapshot = await _client.fetchCategoryItems();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
     List<NewCategoryItem> tempAllCategories = new List<NewCategoryItem>();

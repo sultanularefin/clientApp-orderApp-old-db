@@ -165,20 +165,20 @@ class ClientFoodItemDetailsBloc /*with ChangeNotifier */ implements Bloc  {
 
 
     var snapshot = await _client.fetchAllIngredients();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
 
     List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
+    ingItems = snapshot.docs.map((documentSnapshot) =>
         NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
+          (documentSnapshot.data(), documentSnapshot.id)
 
     ).toList();
 
 
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
+    List<String> documents = snapshot.docs.map((documentSnapshot) =>
+    documentSnapshot.id
     ).toList();
 
 //    print('Ingredient documents are: $documents');

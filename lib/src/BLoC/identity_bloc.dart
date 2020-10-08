@@ -7,8 +7,8 @@ import 'dart:async';
 
 
 //### LOCAL DATA RELATED RESOURCES
-import 'package:foodgallery/src/DataLayer/api/firebase_client.dart';
-import 'package:foodgallery/src/BLoC/bloc.dart';
+import 'package:linkupclient/src/DataLayer/api/firebase_client.dart';
+import 'package:linkupclient/src/BLoC/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';

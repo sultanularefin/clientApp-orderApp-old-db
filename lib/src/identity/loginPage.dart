@@ -5,22 +5,22 @@
 // C:\Users\Taxi\Programs\KebabBankSeptemberOrderApp
 
 // import 'package:foodgallery/lib/src/identity/SignUpPage.dart';
-import 'package:foodgallery/src/identity/SignUpPage.dart';
-import 'package:foodgallery/src/utilities/screen_size_reducers.dart';
+import 'package:linkupclient/src/identity/SignUpPage.dart';
+import 'package:linkupclient/src/utilities/screen_size_reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:foodgallery/src/welcomePage.dart';
+import 'package:linkupclient/src/welcomePage.dart';
 
 import './Widget/bezierContainer.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-import 'package:foodgallery/src/BLoC/bloc_provider.dart';
+import 'package:linkupclient/src/BLoC/bloc_provider.dart';
 
-import 'package:foodgallery/src/BLoC/identity_bloc.dart';
+import 'package:linkupclient/src/BLoC/identity_bloc.dart';
 
 
 class LoginPage extends StatefulWidget {

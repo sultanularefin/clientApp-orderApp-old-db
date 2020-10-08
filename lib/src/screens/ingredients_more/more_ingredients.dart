@@ -38,7 +38,7 @@ import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
 
 // MODEL FILES ENDS HERE.
 
-final Firestore firestore = Firestore();
+// final Firestore firestore = Firestore();
 
 class MoreIngredients extends StatefulWidget {
 //  AdminFirebase({this.firestore});
@@ -46,7 +46,7 @@ class MoreIngredients extends StatefulWidget {
   final Widget child;
 //  final FoodItem oneFoodItemData;
 
-  final Firestore firestore = Firestore.instance;
+  // final Firestore firestore = Firestore.instance;
   final FoodItemWithDocID oneFoodItemData1;
   final List<String> onlyIngredientsNames1;
 
@@ -119,28 +119,29 @@ class _MoreIngredientsPageState extends State<MoreIngredients> {
 
   static Future <List> retrieveIngredients2() async {
     List<NewIngredient> ingItems = new List<NewIngredient>();
-    var snapshot = await Firestore.instance.collection("restaurants").document('USWc8IgrHKdjeDe9Ft4j')
+    var snapshot = await FirebaseFirestore.instance.collection("restaurants")
+        .doc('kebab_bank')
         .collection('ingredients')
-        .getDocuments();
+        .get();
 
 //    firestore
-//        .collection("restaurants").document('USWc8IgrHKdjeDe9Ft4j')
+//        .collection("restaurants").document('kebab_bank')
 //        .collection('ingredients').
 
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 //    print('doc List at more Ingredient page (init State) :  ******************* <================ : $docList');
 
     // ingItems = snapshot.documents.map((documentSnapshot) => IngredientItem.fromMap
     //(documentSnapshot.data)).toList();
 
-    ingItems = snapshot.documents.map((documentSnapshot) => NewIngredient.fromMap
-      (documentSnapshot.data,documentSnapshot.documentID)
+    ingItems = snapshot.docs.map((documentSnapshot) => NewIngredient.fromMap
+      (documentSnapshot.data(),documentSnapshot.id/*documentID*/)
 
     ).toList();
 
 
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
+    List<String> documents = snapshot.docs.map((documentSnapshot) =>
+    documentSnapshot.id/*.documentID*/
     ).toList();
 
     print('documents are [More_ingredients page] : ${documents.length}');

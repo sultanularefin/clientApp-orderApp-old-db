@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foodgallery/src/BLoC/bloc_provider.dart';
-import 'package:foodgallery/src/BLoC/foodGallery_bloc.dart';
-import 'package:foodgallery/src/identity/Widget/bezierContainer.dart';
-import 'package:foodgallery/src/identity/loginPage.dart';
-import 'package:foodgallery/src/BLoC/identity_bloc.dart';
-import 'package:foodgallery/src/screens/foodGallery/foodgallery2.dart';
+import 'package:linkupclient/src/BLoC/bloc_provider.dart';
+import 'package:linkupclient/src/BLoC/foodGallery_bloc.dart';
+import 'package:linkupclient/src/identity/Widget/bezierContainer.dart';
+import 'package:linkupclient/src/identity/loginPage.dart';
+import 'package:linkupclient/src/BLoC/identity_bloc.dart';
+import 'package:linkupclient/src/screens/foodGallery/foodgallery2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';

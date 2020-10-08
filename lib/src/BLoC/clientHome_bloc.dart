@@ -194,16 +194,16 @@ class ClientHomeBloc implements Bloc {
 
 
     var snapshot = await _client.fetchAllIngredients();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 //    logger.e('ingredient docList: $docList');
 
 
 
     List <NewIngredient> ingItems = new List<NewIngredient>();
-    ingItems = snapshot.documents.map((documentSnapshot) =>
+    ingItems = snapshot.docs.map((documentSnapshot) =>
         NewIngredient.fromMap
-          (documentSnapshot.data, documentSnapshot.documentID)
+          (documentSnapshot.data(), documentSnapshot.id)
 
     ).toList();
 
@@ -211,8 +211,8 @@ class ClientHomeBloc implements Bloc {
 //    logger.e('ingItems: $ingItems');
 
 
-    List<String> documents = snapshot.documents.map((documentSnapshot) =>
-    documentSnapshot.documentID
+    List<String> documents = snapshot.docs.map((documentSnapshot) =>
+    documentSnapshot.id
     ).toList();
 
     logger.e('documents: $documents');
@@ -242,7 +242,7 @@ class ClientHomeBloc implements Bloc {
         ' ${_allIngItemsFGBloc.length ==0} or _allIngItemsFGBloc ==null ${_allIngItemsFGBloc == null}');
     var snapshot = await _client.fetchFoodItems();
 
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
 
@@ -438,7 +438,7 @@ class ClientHomeBloc implements Bloc {
 
     var snapshot = await _client.fetchBestSellingFoods();
 
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
 
@@ -513,7 +513,7 @@ class ClientHomeBloc implements Bloc {
 
 
     var snapshot = await _client.fetchCategoryItems();
-    List docList = snapshot.documents;
+    List docList = snapshot.docs;
 
 
     docList.forEach((doc) {
