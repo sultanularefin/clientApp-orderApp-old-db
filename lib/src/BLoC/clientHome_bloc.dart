@@ -1,6 +1,7 @@
 
 // BLOC
 //    import 'package:linkupclient/src/Bloc/
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:linkupclient/src/BLoC/bloc.dart';
 import 'package:linkupclient/src/DataLayer/models/MenuOfferCartTabTypeSingleSelect.dart';
 import 'package:linkupclient/src/DataLayer/models/NewIngredient.dart';
@@ -34,6 +35,11 @@ class ClientHomeBloc implements Bloc {
   var logger = Logger(
     printer: PrettyPrinter(),
   );
+
+  final FirebaseStorage storage =
+  FirebaseStorage(storageBucket: 'gs://linkupadminolddbandclientapp.appspot.com');
+
+
 
   // id ,type ,title <= Location.
 
@@ -124,12 +130,14 @@ class ClientHomeBloc implements Bloc {
 
 
     Map     <String,dynamic> restaurantAddress = snapshot['address'];
-    Map     <String,dynamic> restaurantAttribute = snapshot['attribute'];
+    // Map     <String,dynamic> restaurantAttribute = snapshot['attribute'];
     List    <dynamic> restaurantCousine = snapshot['cousine'];
     bool    restaurantKidFriendly =  snapshot['kid_friendly'];
     bool    restaurantReservation = snapshot['reservation'];
     bool    restaurantRomantic  = snapshot['romantic'];
-    List    <String> restaurantOffday = snapshot['offday'];
+    List    <dynamic> restaurantOffday2 = snapshot['offday'];
+
+    List    <String> restaurantOffday
 
     String  restaurantOpen = snapshot['open'];
 
@@ -166,7 +174,7 @@ class ClientHomeBloc implements Bloc {
 
     Restaurant onlyRestaurant = new Restaurant(
       address:restaurantAddress,
-      attribute: restaurantAttribute,
+      // attribute: restaurantAttribute,
       cousine: restaurantCousine,
       kidFriendly:restaurantKidFriendly, // kid_friendly
       reservation:restaurantReservation,
@@ -263,12 +271,12 @@ class ClientHomeBloc implements Bloc {
 
 
 
-      final bool foodIsAvailable =  doc['available'];
+      final bool foodIsAvailable =  doc['isAvailable'];
 
 
       final Map<String,dynamic> oneFoodSizePriceMap = doc['size'];
 
-      final List<dynamic> foodItemIngredientsList =  doc['ingredient'];
+      final List<dynamic> foodItemIngredientsList =  doc['ingredients'];
 //          logger.i('foodItemIngredientsList at getAllFoodDataFromFireStore: $foodItemIngredientsList');
 
 
@@ -280,8 +288,8 @@ class ClientHomeBloc implements Bloc {
       final String foodItemDocumentID = doc.documentID;
 //      print('foodItemDocumentID $foodItemDocumentID');
 
-      final double foodItemDiscount = doc['discount'];
-      final int foodItemSL = doc['sl'];
+      final double foodItemDiscount = 0; /*doc['discount'];*/
+      final int foodItemSL = doc['sequenceNo'];
 
 
 //      List<NewIngredient> sanitizedIngredients =
@@ -459,12 +467,12 @@ class ClientHomeBloc implements Bloc {
 
 
 
-      final bool foodIsAvailable =  doc['available'];
+      final bool foodIsAvailable =  doc['isAvailable'];
 
 
       final Map<String,dynamic> oneFoodSizePriceMap = doc['size'];
 
-      final List<dynamic> foodItemIngredientsList =  doc['ingredient'];
+      final List<dynamic> foodItemIngredientsList =  doc['ingredients'];
 //          logger.i('foodItemIngredientsList at getAllFoodDataFromFireStore: $foodItemIngredientsList');
 
 
@@ -476,8 +484,8 @@ class ClientHomeBloc implements Bloc {
       final String foodItemDocumentID = doc.documentID;
 //      print('foodItemDocumentID $foodItemDocumentID');
 
-      final double foodItemDiscount = doc['discount'];
-      final int foodItemSL = doc['sl'];
+      final double foodItemDiscount = 0;/*doc['discount'];*/
+      final int foodItemSL = doc['sequenceNo'];
 
 //      print('foodItemDiscount: for $foodItemDocumentID is: $foodItemDiscount');
 
@@ -515,21 +523,23 @@ class ClientHomeBloc implements Bloc {
     var snapshot = await _client.fetchCategoryItems();
     List docList = snapshot.docs;
 
+    List<NewCategoryItem> tempAllCategories = new List<NewCategoryItem>();
 
     docList.forEach((doc) {
 
       final String categoryItemName = doc['name'];
+      final String categoryImageURL  = doc.get('image');
 
-      final String categoryImageURL  = doc['image']==''?
-      'https://thumbs.dreamstime.com/z/smiling-orange-fruit-cartoon-mascot-character-holding-blank-sign-smiling-orange-fruit-cartoon-mascot-character-holding-blank-120325185.jpg'
-          :
-      storageBucketURLPredicate + Uri.encodeComponent(doc['image'])
-          +'?alt=media';
+      // final String categoryImageURL  = doc['image']==''?
+      // 'https://thumbs.dreamstime.com/z/smiling-orange-fruit-cartoon-mascot-character-holding-blank-sign-smiling-orange-fruit-cartoon-mascot-character-holding-blank-120325185.jpg'
+      //     :
+      // storageBucketURLPredicate + Uri.encodeComponent(doc['image'])
+      //     +'?alt=media';
 
 //      print('categoryImageURL in food Gallery Bloc: $categoryImageURL');
 
-      final num categoryRating = doc['rating'];
-      final num totalCategoryRating = doc['total_rating'];
+      final num categoryRating = doc['sequenceNo'];
+      // final num totalCategoryRating = doc['total_rating'];
 
 
       NewCategoryItem oneCategoryItem = new NewCategoryItem(
@@ -538,22 +548,47 @@ class ClientHomeBloc implements Bloc {
         categoryName: categoryItemName,
         imageURL: categoryImageURL,
         rating: categoryRating.toDouble(),
-        totalRating: totalCategoryRating.toDouble(),
+        // totalRating: totalCategoryRating.toDouble(),
 
       );
 
-      _allCategoryList.add(oneCategoryItem);
+      tempAllCategories.add(oneCategoryItem);
+
+      // _allCategoryList.add(oneCategoryItem);
     }
     );
+
+    for (int i =0; i< tempAllCategories.length ; i++){
+
+
+      String fileName2  = tempAllCategories[i].imageURL;
+
+
+      print('fileName2 =============> : $fileName2');
+
+      StorageReference storageReferenceForFoodItemImage = storage
+          .ref()
+          .child(fileName2);
+
+      String newimageURLFood = await storageReferenceForFoodItemImage.getDownloadURL();
+
+      tempAllCategories[i].imageURL= newimageURLFood;
+
+      print('newimageURL category Item : $newimageURLFood');
+    }
+
 
     NewCategoryItem all = new NewCategoryItem(
       categoryName: 'All',
       imageURL: 'None',
       rating: 0,
-      totalRating: 5,
+      // totalRating: 5,
 
     );
 
+    _allCategoryList= tempAllCategories;
+
+    // _allCategoryList.add(all);
     _allCategoryList.add(all);
 
     _categoriesController.sink.add(_allCategoryList);

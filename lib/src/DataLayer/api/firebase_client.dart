@@ -86,8 +86,9 @@ class FirebaseClient {
 
 
     var snapshot= FirebaseFirestore.instance
-        .collection("restaurants").doc('kebab_bank').collection('foodItems').
-    orderBy('sl',descending: false)
+        .collection("restaurants").doc('kebab_bank')
+        .collection('foodItems2').
+    orderBy('sequenceNo',/*descending: false*/)
         // .getDocuments();
         .get();
 
@@ -113,7 +114,7 @@ class FirebaseClient {
 //        .getDocuments();
 
     var snapshot=  /*Firestore.instance*/ FirebaseFirestore.instance
-        .collection("restaurants").doc('kebab_bank').collection('foodItems').limit(15)
+        .collection("restaurants").doc('kebab_bank').collection('foodItems2').limit(15)
 //        .where("name", whereIn: ["kana", "juusto"])
 //         .getDocuments();
         .get();
@@ -157,7 +158,7 @@ class FirebaseClient {
 
     var snapshot = await FirebaseFirestore.instance.collection("restaurants")
         .doc('kebab_bank')
-        .collection('ingredients')
+        .collection('ingredientsOld')
         .get();
 
 //    var snapshot= Firestore.instance
@@ -314,7 +315,7 @@ class FirebaseClient {
 
     var snapshot= FirebaseFirestore.instance
         .collection("restaurants").doc('kebab_bank').
-    collection('categories').orderBy("rating", descending: true)
+    collection('categoriesOld').orderBy("sequenceNo",/* descending: true*/)
         .get();
 
     return snapshot;
